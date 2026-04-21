@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise AILo — Sentinel Invest</title>
+  <meta name="description" content="Veja como o AILo analisa sua carteira em segundos: detecta concentração, mostra risco por classe e explica em português o que você pode fazer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:        #F97316;
+      --orange-light:  #FB923C;
+      --orange-dark:   #EA6C0A;
+      --orange-glow:   rgba(249, 115, 22, 0.25);
+      --orange-subtle: rgba(249, 115, 22, 0.08);
+      --bg:            #0A0A0B;
+      --bg-card:       #111113;
+      --bg-elevated:   #18181B;
+      --border:        rgba(255, 255, 255, 0.07);
+      --border-orange: rgba(249, 115, 22, 0.3);
+      --text:          #FAFAFA;
+      --text-muted:    #A1A1AA;
+      --text-faint:    #52525B;
+      --green:         #34D399;
+      --red:           #F87171;
+      --yellow:        #FBBF24;
+      --radius-sm:     8px;
+      --radius:        14px;
+      --radius-lg:     22px;
+      --transition:    0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: 960px;
+      margin-inline: auto;
+      padding-inline: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-back {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), color var(--transition);
+    }
+
+    .nav-back:hover {
+      border-color: var(--border-orange);
+      color: var(--text);
+    }
+
+    /* ── Lang Selector ─────────────────────────────────────── */
+    .lang-selector { position: relative; }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 11px;
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"] { border-color: var(--border-orange); color: var(--text); }
+
+    .lang-flag { font-size: 15px; line-height: 1; }
+    .lang-code { letter-spacing: 0.04em; }
+
+    .lang-chevron {
+      font-size: 10px;
+      transition: transform var(--transition);
+      opacity: 0.6;
+    }
+
+    .lang-btn[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); opacity: 1; }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      min-width: 148px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 200;
+    }
+
+    .lang-dropdown.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .lang-option:hover { background: var(--orange-subtle); color: var(--text); }
+    .lang-option.active { color: var(--orange-light); background: var(--orange-subtle); }
+    .lang-option-sep { height: 1px; background: var(--border); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 72px 0 48px;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -250px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb a { color: var(--text-muted); transition: color var(--transition); }
+    .breadcrumb a:hover { color: var(--orange-light); }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .highlight { color: var(--orange); }
+
+    .hero .lede {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────────── */
+    section { position: relative; }
+
+    .section-block { padding: 48px 0; }
+
+    .section-block h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-block .kicker {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 10px;
+    }
+
+    .section-block p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+
+    /* ── PROBLEM ──────────────────────────────────────────── */
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 24px;
+      border-left: 3px solid var(--red);
+    }
+
+    .problem-card strong { color: var(--text); font-weight: 600; }
+
+    /* ── STEPS ────────────────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 720px) { .steps { grid-template-columns: 1fr; } }
+
+    .step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 36px; height: 36px;
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .step h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── VIDEO ────────────────────────────────────────────── */
+    .video-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      margin-top: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .video-embed {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-elevated);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--text-muted);
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.08) 0%, transparent 60%);
+    }
+
+    .video-placeholder-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      padding-left: 5px;
+      box-shadow: 0 0 40px var(--orange-glow);
+    }
+
+    .video-placeholder span { font-size: 14px; letter-spacing: 0.04em; }
+
+    .video-caption {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-top: 14px;
+    }
+
+    /* ── SCREENSHOTS ──────────────────────────────────────── */
+    .screenshots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 720px) { .screenshots { grid-template-columns: 1fr; } }
+
+    .screenshot {
+      aspect-ratio: 9 / 16;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-faint);
+      font-size: 13px;
+      padding: 24px;
+      text-align: center;
+      transition: border-color var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screenshot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent 0,
+        transparent 14px,
+        rgba(255,255,255,0.015) 14px,
+        rgba(255,255,255,0.015) 28px
+      );
+      pointer-events: none;
+    }
+
+    .screenshot .icon { font-size: 36px; opacity: 0.4; }
+    .screenshot .label { font-weight: 600; color: var(--text-muted); }
+
+    /* ── EXAMPLE ──────────────────────────────────────────── */
+    .example-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 28px;
+    }
+
+    .example-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .example-title { font-size: 18px; font-weight: 700; }
+
+    .example-meta { font-size: 13px; color: var(--text-faint); }
+    .example-meta .pos { color: var(--green); }
+
+    .example-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .example-table th,
+    .example-table td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .example-table th {
+      color: var(--text-faint);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .example-table td { color: var(--text-muted); }
+
+    .example-table td.ticker { color: var(--text); font-weight: 600; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pill.danger { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+    .pill.warn   { background: rgba(251,191,36,0.1); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+    .pill.ok     { background: rgba(52,211,153,0.08); color: var(--green); border: 1px solid rgba(52,211,153,0.25); }
+
+    .flags {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .flag {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid;
+      background: var(--bg-elevated);
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .flag strong { color: var(--text); font-weight: 600; }
+
+    .flag.danger { border-left-color: var(--red); }
+    .flag.warn   { border-left-color: var(--yellow); }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .cta {
+      padding: 72px 0 96px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta h2 .highlight { color: var(--orange); }
+
+    .cta p {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-dark);
+      box-shadow: 0 0 28px var(--orange-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 13px;
+    }
+
+    .footer a { color: var(--text-muted); transition: color var(--transition); }
+    .footer a:hover { color: var(--orange-light); }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .disclaimer {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 32px;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="https://sentinelinvest.co" class="nav-logo">
+        <span class="nav-logo-icon">◆</span>
+        <span>Sentinel</span>
+      </a>
+      <div class="nav-right">
+        <a href="../index.html" class="nav-back" data-i18n="nav.back"></a>
+        <div class="lang-selector" id="langSelector">
+          <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-flag" id="currentFlag"></span>
+            <span class="lang-code" id="currentCode"></span>
+            <span class="lang-chevron">▾</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu">
+            <button class="lang-option" data-lang="pt" role="menuitem">🇧🇷 Português</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="es" role="menuitem">🇪🇸 Español</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="en" role="menuitem">🇺🇸 English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html" data-i18n="breadcrumb.demos"></a> / <span data-i18n="breadcrumb.current"></span></div>
+      <div class="badge" data-i18n="hero.badge"></div>
+      <h1 data-i18n-html="hero.title"></h1>
+      <p class="lede" data-i18n="hero.lede"></p>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <div class="container">
+    <div class="section-block">
+      <div class="kicker" data-i18n="problem.kicker"></div>
+      <h2 data-i18n="problem.title"></h2>
+      <div class="problem-card">
+        <p data-i18n-html="problem.body"></p>
+      </div>
+    </div>
+
+    <!-- HOW -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="how.kicker"></div>
+      <h2 data-i18n="how.title"></h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3 data-i18n="step1.title"></h3>
+          <p data-i18n="step1.body"></p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3 data-i18n="step2.title"></h3>
+          <p data-i18n="step2.body"></p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 data-i18n="step3.title"></h3>
+          <p data-i18n="step3.body"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="video.kicker"></div>
+      <h2 data-i18n="video.title"></h2>
+      <p data-i18n="video.sub"></p>
+      <div class="video-wrapper">
+        <div class="video-embed">
+          <!-- Preview local. Depois de subir ao YouTube, substituir por <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe> -->
+          <video controls preload="metadata" playsinline style="width:100%;height:100%;background:#000;object-fit:contain;">
+            <source src="../videos/analise-ailo-01.webm" type="video/webm">
+            <div class="video-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <span data-i18n="video.placeholder"></span>
+            </div>
+          </video>
+        </div>
+      </div>
+      <div class="video-caption" data-i18n="video.caption"></div>
+    </div>
+
+    <!-- SCREENSHOTS -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="shots.kicker"></div>
+      <h2 data-i18n="shots.title"></h2>
+      <div class="screenshots">
+        <div class="screenshot">
+          <span class="icon">📱</span>
+          <span class="label" data-i18n="shots.1.label"></span>
+          <span data-i18n="shots.1.sub"></span>
+        </div>
+        <div class="screenshot">
+          <span class="icon">🧠</span>
+          <span class="label" data-i18n="shots.2.label"></span>
+          <span data-i18n="shots.2.sub"></span>
+        </div>
+        <div class="screenshot">
+          <span class="icon">🔔</span>
+          <span class="label" data-i18n="shots.3.label"></span>
+          <span data-i18n="shots.3.sub"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLE -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="example.kicker"></div>
+      <h2 data-i18n="example.title"></h2>
+      <p data-i18n="example.sub"></p>
+
+      <div class="example-card">
+        <div class="example-header">
+          <div>
+            <div class="example-title" data-i18n="example.profile"></div>
+            <div class="example-meta" data-i18n-html="example.metaline"></div>
+          </div>
+        </div>
+
+        <table class="example-table">
+          <thead>
+            <tr>
+              <th data-i18n="table.ticker"></th>
+              <th data-i18n="table.weight"></th>
+              <th data-i18n="table.value"></th>
+              <th data-i18n="table.class"></th>
+              <th data-i18n="table.status"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="ticker">SMH</td><td>43,1%</td><td>7.000</td><td data-i18n="class.etf"></td><td><span class="pill danger" data-i18n="status.crit"></span></td></tr>
+            <tr><td class="ticker">QQQM</td><td>25,7%</td><td>4.180</td><td data-i18n="class.etf"></td><td><span class="pill warn" data-i18n="status.warn"></span></td></tr>
+            <tr><td class="ticker">NVDA</td><td>12,0%</td><td>1.944</td><td data-i18n="class.stock"></td><td><span class="pill ok" data-i18n="status.ok"></span></td></tr>
+            <tr><td class="ticker">PAXG</td><td>8,2%</td><td>1.340</td><td data-i18n="class.crypto"></td><td><span class="pill ok" data-i18n="status.ok"></span></td></tr>
+            <tr><td class="ticker">VTIP</td><td>6,0%</td><td>980</td><td data-i18n="class.etf"></td><td><span class="pill ok" data-i18n="status.ok"></span></td></tr>
+            <tr><td class="ticker">VXUS</td><td>3,9%</td><td>640</td><td data-i18n="class.etf"></td><td><span class="pill ok" data-i18n="status.ok"></span></td></tr>
+            <tr><td class="ticker">CASH</td><td>1,0%</td><td>156</td><td data-i18n="class.cash"></td><td><span class="pill ok" data-i18n="status.ok"></span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="flags">
+          <div class="flag danger" data-i18n-html="flag.1"></div>
+          <div class="flag warn" data-i18n-html="flag.2"></div>
+          <div class="flag warn" data-i18n-html="flag.3"></div>
+        </div>
+      </div>
+
+      <div class="disclaimer" data-i18n="disclaimer"></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2 data-i18n-html="cta.title"></h2>
+      <p data-i18n="cta.sub"></p>
+      <a href="https://sentinelinvest.co" class="btn-primary" data-i18n="cta.button"></a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div data-i18n="footer.copyright"></div>
+      <div class="footer-links">
+        <a href="../index.html" data-i18n="footer.demos"></a>
+        <a href="https://sentinelinvest.co" data-i18n="footer.main"></a>
+        <a href="https://app.sentinelinvest.co/privacy.html" data-i18n="footer.privacy"></a>
+        <a href="https://app.sentinelinvest.co/terms.html" data-i18n="footer.terms"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── i18n ──────────────────────────────────────────────── -->
+  <script>
+    const T = {
+      pt: {
+        'html.lang': 'pt-BR',
+        'meta.title': 'Análise AILo — Sentinel Invest',
+        'meta.description': 'Veja como o AILo analisa sua carteira em segundos: detecta concentração, mostra risco por classe e explica em português o que você pode fazer.',
+        'lang.flag': '🇧🇷', 'lang.code': 'PT',
+        'nav.back': '← Todas as demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'Análise AILo',
+        'hero.badge': '🧠 Funcionalidade · 01',
+        'hero.title': 'Análise <span class="highlight">AILo</span> da sua carteira<br/>em 3 segundos.',
+        'hero.lede': 'A IA lê sua carteira, cruza com o seu perfil de risco e devolve: onde você está concentrado, que classes estão fora de banda e o que fazer em seguida — tudo em português.',
+
+        'problem.kicker': 'O problema',
+        'problem.title': 'Você sabe se está diversificado?',
+        'problem.body': 'A maioria dos investidores olha para a carteira e vê uma lista de tickers. Não vê que <strong>43% está num único ETF de semicondutores</strong>, que <strong>99% está em ações</strong> e que a classe inteira saiu da banda do seu perfil. E mesmo quando desconfia, não sabe se os números batem com o seu perfil de risco ou qual é o próximo passo.',
+
+        'how.kicker': 'Como funciona',
+        'how.title': 'Três passos, um clique.',
+        'step1.title': 'Carteira conectada',
+        'step1.body': 'Você já tem seus ativos cadastrados no Sentinel — manual, via CSV da corretora ou digitando um a um no wizard.',
+        'step2.title': 'Clique em "Análise AILo"',
+        'step2.body': 'A IA lê cada posição, puxa preços em tempo real, calcula pesos por classe e cruza com o seu perfil (conservador / moderado / agressivo).',
+        'step3.title': 'Flags + explicação',
+        'step3.body': 'Concentrações críticas em vermelho, atenções em amarelo, análise narrativa em linguagem natural. Você decide o que fazer — o AILo nunca recomenda.',
+
+        'video.kicker': 'Vídeo',
+        'video.title': 'Veja em 75 segundos.',
+        'video.sub': 'Gravação real do dashboard com carteira de exemplo (dados fictícios — qualquer semelhança com portfólio real é coincidência).',
+        'video.placeholder': 'Vídeo em breve',
+        'video.caption': '75s · Sem narração · Legendas PT-BR',
+
+        'shots.kicker': 'Capturas',
+        'shots.title': 'O que você vai ver.',
+        'shots.1.label': 'Dashboard inicial', 'shots.1.sub': '8 posições · US$ 16k',
+        'shots.2.label': 'Resultado da análise', 'shots.2.sub': 'Flags + IA narrativa',
+        'shots.3.label': 'Alerta Telegram', 'shots.3.sub': 'Concentração detectada',
+
+        'example.kicker': 'Exemplo',
+        'example.title': 'Como a análise vê uma carteira real.',
+        'example.sub': 'Dados fictícios do cliente "João M." — perfil agressivo, 8 posições, valor total US$ 16.240.',
+        'example.profile': 'João M. · Agressivo · US$ 16.240',
+        'example.metaline': 'P&amp;L total: <span class="pos">+8,7%</span> · 8 ativos',
+
+        'table.ticker': 'Ticker', 'table.weight': 'Peso', 'table.value': 'Valor (US$)', 'table.class': 'Classe', 'table.status': 'Status',
+        'class.etf': 'ETF', 'class.stock': 'Ação', 'class.crypto': 'Cripto', 'class.cash': 'Caixa',
+        'status.crit': '🔴 Crítico', 'status.warn': '🟡 Atenção', 'status.ok': '✅ OK',
+
+        'flag.1': '<strong>SMH a 43% — concentração crítica.</strong> O seu perfil agressivo tolera até 40% num único ativo. Considere reduzir para a faixa de 25%.',
+        'flag.2': '<strong>99% em ETFs.</strong> Exposição quase total a uma única classe. Avalie incluir uma classe complementar — bonds, ouro ou outro.',
+        'flag.3': '<strong>QQQM a 25,7%.</strong> Ainda dentro do limite mas muito próximo do teto. Monitore de perto.',
+
+        'disclaimer': 'O AILo nunca recomenda compra ou venda — apresenta análise educativa para você tomar a sua decisão. Dados fictícios neste exemplo.',
+
+        'cta.title': 'Quer ver a <span class="highlight">sua</span> carteira analisada?',
+        'cta.sub': 'Três minutos para cadastrar, três segundos para a análise. US$ 39/mês, sem fidelidade.',
+        'cta.button': 'Começar agora →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — Análise com IA, educação. Não é recomendação de investimento.',
+        'footer.demos': 'Todas as demos', 'footer.main': 'Site principal', 'footer.privacy': 'Privacidade', 'footer.terms': 'Termos',
+      },
+
+      es: {
+        'html.lang': 'es',
+        'meta.title': 'Análisis AILo — Sentinel Invest',
+        'meta.description': 'Vea cómo AILo analiza su portafolio en segundos: detecta concentración, muestra riesgo por clase y explica en español qué puede hacer.',
+        'lang.flag': '🇪🇸', 'lang.code': 'ES',
+        'nav.back': '← Todas las demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'Análisis AILo',
+        'hero.badge': '🧠 Funcionalidad · 01',
+        'hero.title': 'Análisis <span class="highlight">AILo</span> de su portafolio<br/>en 3 segundos.',
+        'hero.lede': 'La IA lee su portafolio, lo cruza con su perfil de riesgo y devuelve: dónde está concentrado, qué clases están fuera de banda y qué hacer después — todo en español.',
+
+        'problem.kicker': 'El problema',
+        'problem.title': '¿Sabe si está diversificado?',
+        'problem.body': 'La mayoría de los inversionistas miran el portafolio y ven una lista de tickers. No ven que <strong>el 43% está en un único ETF de semiconductores</strong>, que <strong>el 99% está en acciones</strong> y que la clase entera salió de la banda de su perfil. Y aunque sospechen, no saben si los números calzan con su perfil de riesgo o cuál es el siguiente paso.',
+
+        'how.kicker': 'Cómo funciona',
+        'how.title': 'Tres pasos, un clic.',
+        'step1.title': 'Portafolio conectado',
+        'step1.body': 'Usted ya tiene sus activos cargados en Sentinel — manual, vía CSV del bróker o uno por uno en el wizard.',
+        'step2.title': 'Haga clic en "Análisis AILo"',
+        'step2.body': 'La IA lee cada posición, trae precios en tiempo real, calcula pesos por clase y los cruza con su perfil (conservador / moderado / agresivo).',
+        'step3.title': 'Flags + explicación',
+        'step3.body': 'Concentraciones críticas en rojo, atenciones en amarillo, análisis narrativo en lenguaje natural. Usted decide qué hacer — AILo nunca recomienda.',
+
+        'video.kicker': 'Video',
+        'video.title': 'Véalo en 75 segundos.',
+        'video.sub': 'Grabación real del dashboard con portafolio de ejemplo (datos ficticios — cualquier parecido con portafolio real es coincidencia).',
+        'video.placeholder': 'Video próximamente',
+        'video.caption': '75s · Sin narración · Subtítulos en español',
+
+        'shots.kicker': 'Capturas',
+        'shots.title': 'Lo que va a ver.',
+        'shots.1.label': 'Dashboard inicial', 'shots.1.sub': '8 posiciones · US$ 16k',
+        'shots.2.label': 'Resultado del análisis', 'shots.2.sub': 'Flags + IA narrativa',
+        'shots.3.label': 'Alerta Telegram', 'shots.3.sub': 'Concentración detectada',
+
+        'example.kicker': 'Ejemplo',
+        'example.title': 'Cómo el análisis ve un portafolio real.',
+        'example.sub': 'Datos ficticios del cliente "Juan M." — perfil agresivo, 8 posiciones, valor total US$ 16.240.',
+        'example.profile': 'Juan M. · Agresivo · US$ 16.240',
+        'example.metaline': 'P&amp;L total: <span class="pos">+8,7%</span> · 8 activos',
+
+        'table.ticker': 'Ticker', 'table.weight': 'Peso', 'table.value': 'Valor (US$)', 'table.class': 'Clase', 'table.status': 'Status',
+        'class.etf': 'ETF', 'class.stock': 'Acción', 'class.crypto': 'Cripto', 'class.cash': 'Caja',
+        'status.crit': '🔴 Crítico', 'status.warn': '🟡 Atención', 'status.ok': '✅ OK',
+
+        'flag.1': '<strong>SMH al 43% — concentración crítica.</strong> Su perfil agresivo tolera hasta 40% en un único activo. Considere reducir al rango de 25%.',
+        'flag.2': '<strong>99% en ETFs.</strong> Exposición casi total a una única clase. Evalúe incluir una clase complementaria — bonos, oro u otro.',
+        'flag.3': '<strong>QQQM al 25,7%.</strong> Aún dentro del límite pero muy cerca del tope. Monitoree de cerca.',
+
+        'disclaimer': 'AILo nunca recomienda compra o venta — presenta análisis educativo para que usted tome su decisión. Datos ficticios en este ejemplo.',
+
+        'cta.title': '¿Quiere ver <span class="highlight">su</span> portafolio analizado?',
+        'cta.sub': 'Tres minutos para registrarse, tres segundos para el análisis. US$ 39/mes, sin permanencia.',
+        'cta.button': 'Empezar ahora →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — Análisis con IA, educación. No es recomendación de inversión.',
+        'footer.demos': 'Todas las demos', 'footer.main': 'Sitio principal', 'footer.privacy': 'Privacidad', 'footer.terms': 'Términos',
+      },
+
+      en: {
+        'html.lang': 'en',
+        'meta.title': 'AILo Analysis — Sentinel Invest',
+        'meta.description': 'See how AILo analyzes your portfolio in seconds: detects concentration, shows risk per class and explains what you can do next.',
+        'lang.flag': '🇺🇸', 'lang.code': 'EN',
+        'nav.back': '← All demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'AILo Analysis',
+        'hero.badge': '🧠 Feature · 01',
+        'hero.title': '<span class="highlight">AILo</span> analysis of your portfolio<br/>in 3 seconds.',
+        'hero.lede': 'The AI reads your portfolio, cross-checks it against your risk profile and tells you: where you are concentrated, which classes are out of band, and what to do next.',
+
+        'problem.kicker': 'The problem',
+        'problem.title': 'Do you know if you are diversified?',
+        'problem.body': 'Most investors look at their portfolio and see a list of tickers. They don\'t see that <strong>43% is in a single semiconductor ETF</strong>, that <strong>99% is in equities</strong>, and that the whole class is out of their profile\'s band. And even when they suspect, they don\'t know if the numbers match their risk profile or what the next step is.',
+
+        'how.kicker': 'How it works',
+        'how.title': 'Three steps, one click.',
+        'step1.title': 'Portfolio connected',
+        'step1.body': 'You already have your holdings in Sentinel — manual entry, broker CSV, or one by one in the wizard.',
+        'step2.title': 'Click "AILo Analysis"',
+        'step2.body': 'The AI reads each position, pulls live prices, computes weights per class, and cross-checks with your profile (conservative / moderate / aggressive).',
+        'step3.title': 'Flags + explanation',
+        'step3.body': 'Critical concentrations in red, warnings in yellow, narrative analysis in natural language. You decide what to do — AILo never recommends.',
+
+        'video.kicker': 'Video',
+        'video.title': 'See it in 75 seconds.',
+        'video.sub': 'Real dashboard recording with a sample portfolio (mock data — any resemblance to a real portfolio is coincidence).',
+        'video.placeholder': 'Video coming soon',
+        'video.caption': '75s · No voiceover · English subtitles',
+
+        'shots.kicker': 'Screenshots',
+        'shots.title': 'What you will see.',
+        'shots.1.label': 'Initial dashboard', 'shots.1.sub': '8 positions · US$ 16k',
+        'shots.2.label': 'Analysis result', 'shots.2.sub': 'Flags + narrative AI',
+        'shots.3.label': 'Telegram alert', 'shots.3.sub': 'Concentration detected',
+
+        'example.kicker': 'Example',
+        'example.title': 'How the analysis sees a real portfolio.',
+        'example.sub': 'Mock data for client "John M." — aggressive profile, 8 positions, total value US$ 16,240.',
+        'example.profile': 'John M. · Aggressive · US$ 16,240',
+        'example.metaline': 'Total P&amp;L: <span class="pos">+8.7%</span> · 8 assets',
+
+        'table.ticker': 'Ticker', 'table.weight': 'Weight', 'table.value': 'Value (US$)', 'table.class': 'Class', 'table.status': 'Status',
+        'class.etf': 'ETF', 'class.stock': 'Stock', 'class.crypto': 'Crypto', 'class.cash': 'Cash',
+        'status.crit': '🔴 Critical', 'status.warn': '🟡 Warning', 'status.ok': '✅ OK',
+
+        'flag.1': '<strong>SMH at 43% — critical concentration.</strong> Your aggressive profile tolerates up to 40% in a single asset. Consider trimming toward the 25% range.',
+        'flag.2': '<strong>99% in ETFs.</strong> Nearly full exposure to a single class. Consider adding a complementary class — bonds, gold, or other.',
+        'flag.3': '<strong>QQQM at 25.7%.</strong> Still within the limit but very close to the ceiling. Watch closely.',
+
+        'disclaimer': 'AILo never recommends buying or selling — it provides educational analysis so you can make your decision. Mock data in this example.',
+
+        'cta.title': 'Want to see <span class="highlight">your</span> portfolio analyzed?',
+        'cta.sub': 'Three minutes to sign up, three seconds to run the analysis. US$ 39/month, no lock-in.',
+        'cta.button': 'Get started →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — AI analysis, education. Not investment advice.',
+        'footer.demos': 'All demos', 'footer.main': 'Main site', 'footer.privacy': 'Privacy', 'footer.terms': 'Terms',
+      },
+    };
+
+    function detectLang() {
+      const saved = localStorage.getItem('sentinel-lang');
+      if (saved && T[saved]) return saved;
+      const b = (navigator.language || 'en').toLowerCase();
+      if (b.startsWith('pt')) return 'pt';
+      if (b.startsWith('es')) return 'es';
+      return 'en';
+    }
+
+    function applyLang(lang) {
+      const d = T[lang];
+      document.documentElement.lang = d['html.lang'];
+      document.title = d['meta.title'];
+      const md = document.querySelector('meta[name="description"]');
+      if (md) md.setAttribute('content', d['meta.description']);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const v = d[el.dataset.i18n];
+        if (v !== undefined) el.textContent = v;
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const v = d[el.dataset.i18nHtml];
+        if (v !== undefined) el.innerHTML = v;
+      });
+
+      document.getElementById('currentFlag').textContent = d['lang.flag'];
+      document.getElementById('currentCode').textContent = d['lang.code'];
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('sentinel-lang', lang);
+    }
+
+    const langBtn      = document.getElementById('langBtn');
+    const langDropdown = document.getElementById('langDropdown');
+
+    const open  = () => { langDropdown.classList.add('open');    langBtn.setAttribute('aria-expanded', 'true');  };
+    const close = () => { langDropdown.classList.remove('open'); langBtn.setAttribute('aria-expanded', 'false'); };
+
+    langBtn.addEventListener('click', e => { e.stopPropagation(); langDropdown.classList.contains('open') ? close() : open(); });
+    document.addEventListener('click', close);
+    langDropdown.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', () => { applyLang(btn.dataset.lang); close(); });
+    });
+
+    applyLang(detectLang());
+  </script>
+
+</body>
+</html>

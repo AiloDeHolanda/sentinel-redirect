@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentinel Invest — Demo: Como funciona o AILo</title>
+  <meta name="description" content="Veja cada funcionalidade do Sentinel Invest em vídeo: análise de portfólio com IA, alertas Telegram, rebalanceamento, ciclo do BTC e mais." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:        #F97316;
+      --orange-light:  #FB923C;
+      --orange-dark:   #EA6C0A;
+      --orange-glow:   rgba(249, 115, 22, 0.25);
+      --orange-subtle: rgba(249, 115, 22, 0.08);
+      --bg:            #0A0A0B;
+      --bg-card:       #111113;
+      --bg-elevated:   #18181B;
+      --border:        rgba(255, 255, 255, 0.07);
+      --border-orange: rgba(249, 115, 22, 0.3);
+      --text:          #FAFAFA;
+      --text-muted:    #A1A1AA;
+      --text-faint:    #52525B;
+      --green:         #34D399;
+      --radius-sm:     8px;
+      --radius:        14px;
+      --radius-lg:     22px;
+      --transition:    0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding-inline: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-back {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), color var(--transition);
+    }
+
+    .nav-back:hover {
+      border-color: var(--border-orange);
+      color: var(--text);
+    }
+
+    /* ── Lang Selector (from landing) ─────────────────────── */
+    .lang-selector { position: relative; }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 11px;
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"] { border-color: var(--border-orange); color: var(--text); }
+
+    .lang-flag { font-size: 15px; line-height: 1; }
+    .lang-code { letter-spacing: 0.04em; }
+
+    .lang-chevron {
+      font-size: 10px;
+      transition: transform var(--transition);
+      opacity: 0.6;
+    }
+
+    .lang-btn[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); opacity: 1; }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      min-width: 148px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 200;
+    }
+
+    .lang-dropdown.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .lang-option:hover { background: var(--orange-subtle); color: var(--text); }
+    .lang-option.active { color: var(--orange-light); background: var(--orange-subtle); }
+    .lang-option-sep { height: 1px; background: var(--border); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 80px 0 48px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 .highlight { color: var(--orange); }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin-inline: auto;
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    /* ── GRID ─────────────────────────────────────────────── */
+    .features { padding: 48px 0 120px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card.available { cursor: pointer; }
+
+    .feature-card.available:hover {
+      border-color: var(--border-orange);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--orange-subtle);
+    }
+
+    .feature-card.coming-soon { opacity: 0.55; }
+
+    .feature-thumb {
+      aspect-ratio: 16 / 9;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--orange-subtle) 0%, transparent 60%);
+    }
+
+    .feature-thumb span {
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .feature-title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .feature-tag.new {
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+    }
+
+    .feature-tag.soon {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .feature-meta {
+      font-size: 12px;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+      margin-top: auto;
+    }
+
+    .feature-meta-dot {
+      width: 3px; height: 3px;
+      background: var(--text-faint);
+      border-radius: 50%;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 13px;
+    }
+
+    .footer a { color: var(--text-muted); transition: color var(--transition); }
+    .footer a:hover { color: var(--orange-light); }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="https://sentinelinvest.co" class="nav-logo">
+        <span class="nav-logo-icon">◆</span>
+        <span>Sentinel</span>
+      </a>
+      <div class="nav-right">
+        <a href="https://sentinelinvest.co" class="nav-back" data-i18n="nav.back"></a>
+        <div class="lang-selector" id="langSelector">
+          <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-flag" id="currentFlag"></span>
+            <span class="lang-code" id="currentCode"></span>
+            <span class="lang-chevron">▾</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu">
+            <button class="lang-option" data-lang="pt" role="menuitem">🇧🇷 Português</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="es" role="menuitem">🇪🇸 Español</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="en" role="menuitem">🇺🇸 English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span data-i18n="hero.badge"></span>
+      </div>
+      <h1 data-i18n-html="hero.title"></h1>
+      <p data-i18n="hero.lede"></p>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="features">
+    <div class="container">
+      <div class="features-grid">
+
+        <!-- 01 — ANÁLISE AILO (available) -->
+        <a href="features/01-analise-ailo.html" class="feature-card available">
+          <div class="feature-thumb">
+            <div class="feature-thumb-overlay"></div>
+            <span>🧠</span>
+          </div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.01.title"></div>
+            <span class="feature-tag new" data-i18n="tag.new"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.01.desc"></div>
+          <div class="feature-meta">
+            <span data-i18n="f.01.meta1"></span>
+            <span class="feature-meta-dot"></span>
+            <span data-i18n="f.01.meta2"></span>
+          </div>
+        </a>
+
+        <!-- 02..12 — coming soon (loop de templates) -->
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🔔</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.02.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.02.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🎯</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.03.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.03.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🌐</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.04.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.04.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🔮</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.05.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.05.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🧭</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.06.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.06.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>🔶</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.07.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.07.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>📊</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.08.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.08.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>⚖️</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.09.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.09.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>💱</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.10.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.10.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>☕</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.11.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.11.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+        <div class="feature-card coming-soon">
+          <div class="feature-thumb"><span>💬</span></div>
+          <div class="feature-header">
+            <div class="feature-title" data-i18n="f.12.title"></div>
+            <span class="feature-tag soon" data-i18n="tag.soon"></span>
+          </div>
+          <div class="feature-desc" data-i18n="f.12.desc"></div>
+          <div class="feature-meta"><span data-i18n="meta.soon"></span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div data-i18n="footer.copyright"></div>
+      <div class="footer-links">
+        <a href="https://sentinelinvest.co" data-i18n="footer.main"></a>
+        <a href="https://app.sentinelinvest.co/privacy.html" data-i18n="footer.privacy"></a>
+        <a href="https://app.sentinelinvest.co/terms.html" data-i18n="footer.terms"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── i18n ──────────────────────────────────────────────── -->
+  <script>
+    const T = {
+      pt: {
+        'html.lang': 'pt-BR',
+        'meta.title': 'Sentinel Invest — Demo: Como funciona o AILo',
+        'meta.description': 'Veja cada funcionalidade do Sentinel Invest em vídeo: análise de portfólio com IA, alertas Telegram, rebalanceamento, ciclo do BTC e mais.',
+        'lang.flag': '🇧🇷', 'lang.code': 'PT',
+        'nav.back': '← Voltar ao site',
+        'hero.badge': 'Demonstrações',
+        'hero.title': 'Como o <span class="highlight">AILo</span> funciona,<br/>funcionalidade por funcionalidade.',
+        'hero.lede': 'Vídeos curtos e exemplos reais (com dados fictícios) de tudo o que o Sentinel Invest faz pela sua carteira — análise com IA, alertas, rebalanceamento e mais.',
+        'tag.new': 'Novo',
+        'tag.soon': 'Em breve',
+        'meta.soon': 'Gravação prevista',
+        'f.01.title': 'Análise AILo da sua carteira',
+        'f.01.desc':  'IA lê sua carteira em segundos e mostra concentração, risco e o que fazer — em português.',
+        'f.01.meta1': '▶ Vídeo 75s', 'f.01.meta2': 'Exemplo real',
+        'f.02.title': 'Alertas pró-activos no Telegram',
+        'f.02.desc':  'Avisamos quando a concentração passa do limite, quando um ativo cai forte no dia ou quando a classe inteira sai de banda.',
+        'f.03.title': 'Bandas de alerta personalizadas',
+        'f.03.desc':  'Você define o que é "concentrado demais" para o seu perfil — conservador, moderado ou agressivo.',
+        'f.04.title': 'Vista consolidada (multi-carteira)',
+        'f.04.desc':  'Quando você tem 3 carteiras separadas, o risco real só aparece quando agrega tudo. Convertemos moedas automaticamente.',
+        'f.05.title': 'Oracle Portfolio — carteira-modelo',
+        'f.05.desc':  'A carteira-modelo gerida pelo AILo que você pode usar como benchmark ou inspiração.',
+        'f.06.title': 'Wizard de onboarding',
+        'f.06.desc':  'Do zero à primeira análise em 2 minutos. Colar CSV da corretora, começar do zero ou só explorar.',
+        'f.07.title': 'Tracker do ciclo do Bitcoin',
+        'f.07.desc':  'Sabe em que fase do ciclo pós-halving estamos? Projeção de topo e fundo com base nos ciclos anteriores.',
+        'f.08.title': 'Resumo semanal vs VT (mundo)',
+        'f.08.desc':  'Todo domingo, comparamos sua performance contra o ETF que representa o mundo inteiro. Está a bater o "comprar tudo e esquecer"?',
+        'f.09.title': 'Sugestões de rebalanceamento',
+        'f.09.desc':  'Não só dizemos "reduza SMH" — dizemos quanto em dólares, qual o alvo e porquê. Você decide executar.',
+        'f.10.title': 'Carteiras em R$, US$, CLP, €',
+        'f.10.desc':  'Cada carteira na sua moeda nativa. P&L calculado sem erro de arredondamento entre conversões.',
+        'f.11.title': 'Briefing diário às 11h',
+        'f.11.desc':  'Seu jornal financeiro personalizado — mercados, sua carteira, ciclo BTC e o que pode vir a seguir.',
+        'f.12.title': 'Pergunte qualquer coisa',
+        'f.12.desc':  'Chat IA que conhece a SUA carteira. "Faz sentido trocar QQQM por VOO?" → resposta contextualizada no seu portfólio.',
+        'footer.copyright': '© 2026 Sentinel Invest — Análise com IA, educação. Não é recomendação de investimento.',
+        'footer.main': 'Site principal',
+        'footer.privacy': 'Privacidade',
+        'footer.terms': 'Termos',
+      },
+      es: {
+        'html.lang': 'es',
+        'meta.title': 'Sentinel Invest — Demo: Cómo funciona AILo',
+        'meta.description': 'Conozca cada funcionalidad de Sentinel Invest en video: análisis de portafolio con IA, alertas por Telegram, rebalanceo, ciclo del BTC y más.',
+        'lang.flag': '🇪🇸', 'lang.code': 'ES',
+        'nav.back': '← Volver al sitio',
+        'hero.badge': 'Demostraciones',
+        'hero.title': 'Cómo funciona <span class="highlight">AILo</span>,<br/>funcionalidad por funcionalidad.',
+        'hero.lede': 'Videos cortos y ejemplos reales (con datos ficticios) de todo lo que Sentinel Invest hace por su portafolio — análisis con IA, alertas, rebalanceo y más.',
+        'tag.new': 'Nuevo',
+        'tag.soon': 'Próximamente',
+        'meta.soon': 'Grabación prevista',
+        'f.01.title': 'Análisis AILo de su portafolio',
+        'f.01.desc':  'La IA lee su portafolio en segundos y muestra concentración, riesgo y qué hacer — en español.',
+        'f.01.meta1': '▶ Video 75s', 'f.01.meta2': 'Ejemplo real',
+        'f.02.title': 'Alertas proactivas en Telegram',
+        'f.02.desc':  'Avisamos cuando la concentración supera el límite, cuando un activo cae fuerte en el día o cuando una clase sale de banda.',
+        'f.03.title': 'Bandas de alerta personalizadas',
+        'f.03.desc':  'Usted define qué es "demasiado concentrado" para su perfil — conservador, moderado o agresivo.',
+        'f.04.title': 'Vista consolidada (multi-portafolio)',
+        'f.04.desc':  'Cuando tiene 3 portafolios separados, el riesgo real solo aparece al agregarlos. Convertimos monedas automáticamente.',
+        'f.05.title': 'Oracle Portfolio — portafolio modelo',
+        'f.05.desc':  'El portafolio modelo gestionado por AILo que puede usar como benchmark o inspiración.',
+        'f.06.title': 'Wizard de onboarding',
+        'f.06.desc':  'De cero al primer análisis en 2 minutos. Pegar CSV del bróker, empezar de cero o solo explorar.',
+        'f.07.title': 'Tracker del ciclo del Bitcoin',
+        'f.07.desc':  '¿Sabe en qué fase del ciclo post-halving estamos? Proyección de techo y suelo según los ciclos anteriores.',
+        'f.08.title': 'Resumen semanal vs VT (mundo)',
+        'f.08.desc':  'Cada domingo, comparamos su desempeño con el ETF que representa al mundo entero. ¿Está venciendo al "comprar todo y olvidar"?',
+        'f.09.title': 'Sugerencias de rebalanceo',
+        'f.09.desc':  'No solo decimos "reduzca SMH" — decimos cuánto en dólares, cuál es el objetivo y por qué. Usted decide ejecutar.',
+        'f.10.title': 'Portafolios en R$, US$, CLP, €',
+        'f.10.desc':  'Cada portafolio en su moneda nativa. P&L calculado sin error de redondeo entre conversiones.',
+        'f.11.title': 'Briefing diario a las 11h',
+        'f.11.desc':  'Su periódico financiero personalizado — mercados, su portafolio, ciclo BTC y qué puede venir después.',
+        'f.12.title': 'Pregunte lo que sea',
+        'f.12.desc':  'Chat IA que conoce SU portafolio. "¿Tiene sentido cambiar QQQM por VOO?" → respuesta contextualizada.',
+        'footer.copyright': '© 2026 Sentinel Invest — Análisis con IA, educación. No es recomendación de inversión.',
+        'footer.main': 'Sitio principal',
+        'footer.privacy': 'Privacidad',
+        'footer.terms': 'Términos',
+      },
+      en: {
+        'html.lang': 'en',
+        'meta.title': 'Sentinel Invest — Demo: How AILo works',
+        'meta.description': 'See every Sentinel Invest feature in video: AI portfolio analysis, Telegram alerts, rebalancing, BTC cycle and more.',
+        'lang.flag': '🇺🇸', 'lang.code': 'EN',
+        'nav.back': '← Back to site',
+        'hero.badge': 'Demos',
+        'hero.title': 'How <span class="highlight">AILo</span> works,<br/>feature by feature.',
+        'hero.lede': 'Short videos and real examples (with mock data) of everything Sentinel Invest does for your portfolio — AI analysis, alerts, rebalancing and more.',
+        'tag.new': 'New',
+        'tag.soon': 'Soon',
+        'meta.soon': 'Recording planned',
+        'f.01.title': 'AILo portfolio analysis',
+        'f.01.desc':  'AI reads your portfolio in seconds and shows concentration, risk and what to do — in your language.',
+        'f.01.meta1': '▶ 75s video', 'f.01.meta2': 'Real example',
+        'f.02.title': 'Proactive Telegram alerts',
+        'f.02.desc':  'We ping you when concentration exceeds your threshold, when an asset drops sharply intraday, or when a whole class goes out of band.',
+        'f.03.title': 'Custom alert bands',
+        'f.03.desc':  'You define what "too concentrated" means for your profile — conservative, moderate or aggressive.',
+        'f.04.title': 'Consolidated view (multi-portfolio)',
+        'f.04.desc':  'When you have 3 separate portfolios, real risk only shows when you aggregate. We handle currency conversion automatically.',
+        'f.05.title': 'Oracle Portfolio — model carry',
+        'f.05.desc':  'The AILo-managed model portfolio you can use as a benchmark or inspiration.',
+        'f.06.title': 'Onboarding wizard',
+        'f.06.desc':  'From zero to first analysis in 2 minutes. Paste broker CSV, start from scratch, or just explore.',
+        'f.07.title': 'Bitcoin cycle tracker',
+        'f.07.desc':  'Know which phase of the post-halving cycle we\'re in. Top and bottom projections based on previous cycles.',
+        'f.08.title': 'Weekly review vs VT (world)',
+        'f.08.desc':  'Every Sunday, we compare your performance against the ETF that represents the entire world. Are you beating "buy everything and forget"?',
+        'f.09.title': 'Rebalancing suggestions',
+        'f.09.desc':  'We don\'t just say "reduce SMH" — we say how much in dollars, what the target is, and why. You decide to execute.',
+        'f.10.title': 'Portfolios in R$, US$, CLP, €',
+        'f.10.desc':  'Each portfolio in its native currency. P&L calculated without rounding errors between conversions.',
+        'f.11.title': 'Daily briefing at 11am',
+        'f.11.desc':  'Your personalized financial paper — markets, your portfolio, BTC cycle and what may come next.',
+        'f.12.title': 'Ask anything',
+        'f.12.desc':  'AI chat that knows YOUR portfolio. "Does it make sense to swap QQQM for VOO?" → a contextual answer.',
+        'footer.copyright': '© 2026 Sentinel Invest — AI analysis, education. Not investment advice.',
+        'footer.main': 'Main site',
+        'footer.privacy': 'Privacy',
+        'footer.terms': 'Terms',
+      },
+    };
+
+    function detectLang() {
+      const saved = localStorage.getItem('sentinel-lang');
+      if (saved && T[saved]) return saved;
+      const b = (navigator.language || 'en').toLowerCase();
+      if (b.startsWith('pt')) return 'pt';
+      if (b.startsWith('es')) return 'es';
+      return 'en';
+    }
+
+    function applyLang(lang) {
+      const d = T[lang];
+      document.documentElement.lang = d['html.lang'];
+      document.title = d['meta.title'];
+      const md = document.querySelector('meta[name="description"]');
+      if (md) md.setAttribute('content', d['meta.description']);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const v = d[el.dataset.i18n];
+        if (v !== undefined) el.textContent = v;
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const v = d[el.dataset.i18nHtml];
+        if (v !== undefined) el.innerHTML = v;
+      });
+
+      document.getElementById('currentFlag').textContent = d['lang.flag'];
+      document.getElementById('currentCode').textContent = d['lang.code'];
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('sentinel-lang', lang);
+    }
+
+    const langBtn      = document.getElementById('langBtn');
+    const langDropdown = document.getElementById('langDropdown');
+
+    const open  = () => { langDropdown.classList.add('open');    langBtn.setAttribute('aria-expanded', 'true');  };
+    const close = () => { langDropdown.classList.remove('open'); langBtn.setAttribute('aria-expanded', 'false'); };
+
+    langBtn.addEventListener('click', e => { e.stopPropagation(); langDropdown.classList.contains('open') ? close() : open(); });
+    document.addEventListener('click', close);
+    langDropdown.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', () => { applyLang(btn.dataset.lang); close(); });
+    });
+
+    applyLang(detectLang());
+  </script>
+
+</body>
+</html>
