@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oracle Portfolio — Sentinel Invest</title>
+  <meta name="description" content="A carteira-modelo do AILo em tempo real: regime macro, posições, benchmarks e comentário diário — tudo transparente, auditável, zero caixa-preta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:        #F97316;
+      --orange-light:  #FB923C;
+      --orange-dark:   #EA6C0A;
+      --orange-glow:   rgba(249, 115, 22, 0.25);
+      --orange-subtle: rgba(249, 115, 22, 0.08);
+      --bg:            #0A0A0B;
+      --bg-card:       #111113;
+      --bg-elevated:   #18181B;
+      --border:        rgba(255, 255, 255, 0.07);
+      --border-orange: rgba(249, 115, 22, 0.3);
+      --text:          #FAFAFA;
+      --text-muted:    #A1A1AA;
+      --text-faint:    #52525B;
+      --green:         #34D399;
+      --red:           #F87171;
+      --yellow:        #FBBF24;
+      --gold:          #C9A84C;
+      --radius-sm:     8px;
+      --radius:        14px;
+      --radius-lg:     22px;
+      --transition:    0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: 960px;
+      margin-inline: auto;
+      padding-inline: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-back {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), color var(--transition);
+    }
+
+    .nav-back:hover {
+      border-color: var(--border-orange);
+      color: var(--text);
+    }
+
+    /* ── Lang Selector ─────────────────────────────────────── */
+    .lang-selector { position: relative; }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 11px;
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"] { border-color: var(--border-orange); color: var(--text); }
+
+    .lang-flag { font-size: 15px; line-height: 1; }
+    .lang-code { letter-spacing: 0.04em; }
+
+    .lang-chevron {
+      font-size: 10px;
+      transition: transform var(--transition);
+      opacity: 0.6;
+    }
+
+    .lang-btn[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); opacity: 1; }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      min-width: 148px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 200;
+    }
+
+    .lang-dropdown.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .lang-option:hover { background: var(--orange-subtle); color: var(--text); }
+    .lang-option.active { color: var(--orange-light); background: var(--orange-subtle); }
+    .lang-option-sep { height: 1px; background: var(--border); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 72px 0 48px;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -250px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb a { color: var(--text-muted); transition: color var(--transition); }
+    .breadcrumb a:hover { color: var(--orange-light); }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .highlight { color: var(--orange); }
+
+    .hero .lede {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────────── */
+    section { position: relative; }
+
+    .section-block { padding: 48px 0; }
+
+    .section-block h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-block .kicker {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 10px;
+    }
+
+    .section-block p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+
+    /* ── PROBLEM ──────────────────────────────────────────── */
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 24px;
+      border-left: 3px solid var(--gold);
+    }
+
+    .problem-card strong { color: var(--text); font-weight: 600; }
+
+    /* ── STEPS ────────────────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 720px) { .steps { grid-template-columns: 1fr; } }
+
+    .step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 36px; height: 36px;
+      background: var(--orange-subtle);
+      border: 1px solid var(--border-orange);
+      color: var(--orange-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .step h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── VIDEO ────────────────────────────────────────────── */
+    .video-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      margin-top: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .video-embed {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-elevated);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--text-muted);
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.08) 0%, transparent 60%);
+    }
+
+    .video-placeholder-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      padding-left: 5px;
+      box-shadow: 0 0 40px var(--orange-glow);
+    }
+
+    .video-placeholder span { font-size: 14px; letter-spacing: 0.04em; }
+
+    .video-caption {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-top: 14px;
+    }
+
+    /* ── WHY ──────────────────────────────────────────────── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 720px) { .why-grid { grid-template-columns: 1fr; } }
+
+    .why-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px 22px;
+      position: relative;
+    }
+
+    .why-card .icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .why-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .why-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── EXAMPLE ──────────────────────────────────────────── */
+    .example-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 28px;
+    }
+
+    .example-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .example-title { font-size: 18px; font-weight: 700; }
+
+    .example-meta { font-size: 13px; color: var(--text-faint); }
+    .example-meta .pos { color: var(--green); }
+
+    .regime-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.25);
+      color: var(--green);
+    }
+
+    .regime-badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(52,211,153,0.6);
+    }
+
+    .example-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .example-table th,
+    .example-table td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .example-table th {
+      color: var(--text-faint);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .example-table td { color: var(--text-muted); }
+
+    .example-table td.ticker { color: var(--text); font-weight: 600; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pill.type-etf    { background: rgba(249,115,22,0.08);  color: var(--orange-light); border: 1px solid var(--border-orange); }
+    .pill.type-stock  { background: rgba(96,165,250,0.08);  color: #93C5FD; border: 1px solid rgba(96,165,250,0.3); }
+    .pill.type-crypto { background: rgba(251,191,36,0.08);  color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+    .pill.type-cash   { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border); }
+
+    .commentary {
+      margin-top: 24px;
+      padding: 20px 22px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--orange);
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .commentary strong { color: var(--text); font-weight: 600; }
+
+    .commentary-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 8px;
+    }
+
+    .disclaimer {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 32px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .cta {
+      padding: 72px 0 96px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta h2 .highlight { color: var(--orange); }
+
+    .cta p {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-dark);
+      box-shadow: 0 0 28px var(--orange-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 13px;
+    }
+
+    .footer a { color: var(--text-muted); transition: color var(--transition); }
+    .footer a:hover { color: var(--orange-light); }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="https://sentinelinvest.co" class="nav-logo">
+        <span class="nav-logo-icon">◆</span>
+        <span>Sentinel</span>
+      </a>
+      <div class="nav-right">
+        <a href="../index.html" class="nav-back" data-i18n="nav.back"></a>
+        <div class="lang-selector" id="langSelector">
+          <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-flag" id="currentFlag"></span>
+            <span class="lang-code" id="currentCode"></span>
+            <span class="lang-chevron">▾</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu">
+            <button class="lang-option" data-lang="pt" role="menuitem">🇧🇷 Português</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="es" role="menuitem">🇪🇸 Español</button>
+            <div class="lang-option-sep"></div>
+            <button class="lang-option" data-lang="en" role="menuitem">🇺🇸 English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html" data-i18n="breadcrumb.demos"></a> / <span data-i18n="breadcrumb.current"></span></div>
+      <div class="badge" data-i18n="hero.badge"></div>
+      <h1 data-i18n-html="hero.title"></h1>
+      <p class="lede" data-i18n="hero.lede"></p>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <div class="container">
+    <div class="section-block">
+      <div class="kicker" data-i18n="problem.kicker"></div>
+      <h2 data-i18n="problem.title"></h2>
+      <div class="problem-card">
+        <p data-i18n-html="problem.body"></p>
+      </div>
+    </div>
+
+    <!-- HOW -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="how.kicker"></div>
+      <h2 data-i18n="how.title"></h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3 data-i18n="step1.title"></h3>
+          <p data-i18n="step1.body"></p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3 data-i18n="step2.title"></h3>
+          <p data-i18n="step2.body"></p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 data-i18n="step3.title"></h3>
+          <p data-i18n="step3.body"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="video.kicker"></div>
+      <h2 data-i18n="video.title"></h2>
+      <p data-i18n="video.sub"></p>
+      <div class="video-wrapper">
+        <div class="video-embed">
+          <video controls preload="metadata" playsinline style="width:100%;height:100%;background:#000;object-fit:contain;">
+            <source src="../videos/oracle-portfolio-02.webm" type="video/webm">
+            <div class="video-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <span data-i18n="video.placeholder"></span>
+            </div>
+          </video>
+        </div>
+      </div>
+      <div class="video-caption" data-i18n="video.caption"></div>
+    </div>
+
+    <!-- WHY -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="why.kicker"></div>
+      <h2 data-i18n="why.title"></h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="icon">🔍</div>
+          <h4 data-i18n="why.1.title"></h4>
+          <p data-i18n="why.1.body"></p>
+        </div>
+        <div class="why-card">
+          <div class="icon">📈</div>
+          <h4 data-i18n="why.2.title"></h4>
+          <p data-i18n="why.2.body"></p>
+        </div>
+        <div class="why-card">
+          <div class="icon">🧭</div>
+          <h4 data-i18n="why.3.title"></h4>
+          <p data-i18n="why.3.body"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLE -->
+    <div class="section-block">
+      <div class="kicker" data-i18n="example.kicker"></div>
+      <h2 data-i18n="example.title"></h2>
+      <p data-i18n="example.sub"></p>
+
+      <div class="example-card">
+        <div class="example-header">
+          <div>
+            <div class="example-title" data-i18n="example.profile"></div>
+            <div class="example-meta" data-i18n-html="example.metaline"></div>
+          </div>
+          <span class="regime-badge">
+            <span class="dot"></span>
+            <span data-i18n="regime.label"></span>
+          </span>
+        </div>
+
+        <table class="example-table">
+          <thead>
+            <tr>
+              <th data-i18n="table.ticker"></th>
+              <th data-i18n="table.weight"></th>
+              <th data-i18n="table.name"></th>
+              <th data-i18n="table.class"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="ticker">QQQM</td><td>18%</td><td data-i18n="asset.qqqm"></td><td><span class="pill type-etf" data-i18n="class.etf"></span></td></tr>
+            <tr><td class="ticker">PAXG</td><td>15%</td><td data-i18n="asset.paxg"></td><td><span class="pill type-crypto" data-i18n="class.crypto"></span></td></tr>
+            <tr><td class="ticker">SMH</td><td>13%</td><td data-i18n="asset.smh"></td><td><span class="pill type-etf" data-i18n="class.etf"></span></td></tr>
+            <tr><td class="ticker">NVDA</td><td>12%</td><td data-i18n="asset.nvda"></td><td><span class="pill type-stock" data-i18n="class.stock"></span></td></tr>
+            <tr><td class="ticker">VTIP</td><td>12%</td><td data-i18n="asset.vtip"></td><td><span class="pill type-etf" data-i18n="class.etf"></span></td></tr>
+            <tr><td class="ticker">VXUS</td><td>10%</td><td data-i18n="asset.vxus"></td><td><span class="pill type-etf" data-i18n="class.etf"></span></td></tr>
+            <tr><td class="ticker">URA</td><td>10%</td><td data-i18n="asset.ura"></td><td><span class="pill type-etf" data-i18n="class.etf"></span></td></tr>
+            <tr><td class="ticker">CASH</td><td>10%</td><td data-i18n="asset.cash"></td><td><span class="pill type-cash" data-i18n="class.cash"></span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="commentary">
+          <span class="commentary-label" data-i18n="commentary.label"></span>
+          <span data-i18n-html="commentary.body"></span>
+        </div>
+      </div>
+
+      <div class="disclaimer" data-i18n="disclaimer"></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2 data-i18n-html="cta.title"></h2>
+      <p data-i18n="cta.sub"></p>
+      <a href="https://sentinelinvest.co" class="btn-primary" data-i18n="cta.button"></a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div data-i18n="footer.copyright"></div>
+      <div class="footer-links">
+        <a href="../index.html" data-i18n="footer.demos"></a>
+        <a href="https://sentinelinvest.co" data-i18n="footer.main"></a>
+        <a href="https://app.sentinelinvest.co/privacy.html" data-i18n="footer.privacy"></a>
+        <a href="https://app.sentinelinvest.co/terms.html" data-i18n="footer.terms"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── i18n ──────────────────────────────────────────────── -->
+  <script>
+    const T = {
+      pt: {
+        'html.lang': 'pt-BR',
+        'meta.title': 'Oracle Portfolio — Sentinel Invest',
+        'meta.description': 'A carteira-modelo do AILo em tempo real: regime macro, posições, benchmarks e comentário diário — transparente e auditável.',
+        'lang.flag': '🇧🇷', 'lang.code': 'PT',
+        'nav.back': '← Todas as demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'Oracle Portfolio',
+        'hero.badge': '🔮 Funcionalidade · 02',
+        'hero.title': '<span class="highlight">Oracle Portfolio</span>.<br/>A carteira-modelo do AILo, em tempo real.',
+        'hero.lede': 'Uma carteira real, com posições reais, preços ao vivo e o regime macro actual — gerida pelo AILo e auditável por você. Use como benchmark, inspiração ou simplesmente para acompanhar como um investidor institucional navega cada ciclo.',
+
+        'problem.kicker': 'O problema',
+        'problem.title': '"Confia em mim, a estratégia é esta" não basta.',
+        'problem.body': 'A maior parte das carteiras-modelo do mercado é uma caixa-preta. Você vê o resultado <strong>depois</strong>, raramente vê o raciocínio, e quase nunca vê <strong>quando o gestor mudou de ideia</strong>. Para decidir com consciência é preciso ver a carteira, o regime de mercado que a justifica e o comentário diário — tudo ao mesmo tempo.',
+
+        'how.kicker': 'Como funciona',
+        'how.title': 'Carteira + regime + comentário. Sempre sincronizados.',
+        'step1.title': 'Regime macro detectado',
+        'step1.body': 'O AILo classifica o momento actual (A/B/C/D) com base em inflação, crescimento, volatilidade e ciclo BTC. Cada regime tem uma alocação alvo.',
+        'step2.title': 'Alocação publicada',
+        'step2.body': 'As posições do Oracle Portfolio, pesos, bandas de tolerância e preços ao vivo — todos visíveis no seu dashboard desde o primeiro dia.',
+        'step3.title': 'Comentário diário',
+        'step3.body': 'Todos os dias às 11h, o AILo explica em linguagem natural porque a alocação continua como está — ou porque vai mudar nos próximos dias.',
+
+        'video.kicker': 'Vídeo',
+        'video.title': 'Veja em 55 segundos.',
+        'video.sub': 'Gravação real do Oracle Portfolio no dashboard: regime actual, KPIs, donut da composição, chart vs benchmarks (VT, SPY, QQQ, BTC) e as 8 posições ao vivo.',
+        'video.placeholder': 'Vídeo em breve',
+        'video.caption': '55s · Sem narração · Legendas PT-BR',
+
+        'why.kicker': 'Para que serve',
+        'why.title': 'Três formas de usar.',
+        'why.1.title': 'Como benchmark',
+        'why.1.body': 'Compare a sua carteira pessoal contra uma carteira de "regime actual" para ver se está alinhado com o momento macro.',
+        'why.2.title': 'Como inspiração',
+        'why.2.body': 'Veja que classes estão presentes, em que proporção, e descubra ideias (URA, VTIP, PAXG) que talvez ainda não conheça.',
+        'why.3.title': 'Para aprender',
+        'why.3.body': 'O comentário diário em português mostra o porquê de cada escolha. É um curso prático de alocação, disfarçado de carteira.',
+
+        'example.kicker': 'Estado actual',
+        'example.title': 'Como está hoje a carteira.',
+        'example.sub': '8 posições distribuídas por ETFs, uma ação, cripto (ouro tokenizado) e caixa. Cada ativo justificável pelo regime macro em vigor.',
+        'example.profile': 'Oracle Portfolio · Regime B (crescimento cauteloso)',
+        'example.metaline': 'Inception 2025-Q4 · Actualizado diariamente · <span class="pos">8 posições</span>',
+        'regime.label': 'Regime B · crescimento cauteloso',
+
+        'table.ticker': 'Ticker',
+        'table.weight': 'Peso',
+        'table.name': 'Nome',
+        'table.class': 'Classe',
+
+        'asset.qqqm': 'Nasdaq-100 (low cost)',
+        'asset.paxg': 'Ouro tokenizado',
+        'asset.smh':  'Semicondutores',
+        'asset.nvda': 'Nvidia',
+        'asset.vtip': 'TIPS curto prazo',
+        'asset.vxus': 'Ações ex-EUA',
+        'asset.ura':  'Urânio / nuclear',
+        'asset.cash': 'USD / treasuries curtas',
+
+        'class.etf':    'ETF',
+        'class.stock':  'Ação',
+        'class.crypto': 'Cripto',
+        'class.cash':   'Caixa',
+
+        'commentary.label': 'Comentário do AILo (trecho)',
+        'commentary.body': '"Mantemos a exposição a tecnologia (<strong>QQQM + SMH + NVDA = 43%</strong>) mas com paraquedas: <strong>15% em ouro</strong> e <strong>12% em TIPS</strong> cobrem uma reacção inflacionária. <strong>URA a 10%</strong> continua justificado pela tese estrutural de energia nuclear. Caixa a 10% permite agir se o VIX subir acima de 25."',
+
+        'disclaimer': 'Oracle Portfolio é uma carteira-modelo educativa mantida pelo AILo. Não é recomendação de compra ou venda — cada cliente decide se replica, adapta ou ignora. Dados reais de produção; pesos podem variar ligeiramente.',
+
+        'cta.title': 'Quer ver o Oracle <span class="highlight">ao lado</span> da sua carteira?',
+        'cta.sub': 'Um clique no dashboard e os dois aparecem lado a lado, com pesos, regime e comentário do dia. US$ 39/mês, sem fidelidade.',
+        'cta.button': 'Começar agora →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — Análise com IA, educação. Não é recomendação de investimento.',
+        'footer.demos': 'Todas as demos', 'footer.main': 'Site principal', 'footer.privacy': 'Privacidade', 'footer.terms': 'Termos',
+      },
+
+      es: {
+        'html.lang': 'es',
+        'meta.title': 'Oracle Portfolio — Sentinel Invest',
+        'meta.description': 'El portafolio modelo de AILo en tiempo real: régimen macro, posiciones, benchmarks y comentario diario — transparente y auditable.',
+        'lang.flag': '🇪🇸', 'lang.code': 'ES',
+        'nav.back': '← Todas las demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'Oracle Portfolio',
+        'hero.badge': '🔮 Funcionalidad · 02',
+        'hero.title': '<span class="highlight">Oracle Portfolio</span>.<br/>El portafolio modelo de AILo, en tiempo real.',
+        'hero.lede': 'Un portafolio real, con posiciones reales, precios en vivo y el régimen macro actual — gestionado por AILo y auditable por usted. Úselo como benchmark, inspiración o simplemente para acompañar cómo un inversor institucional navega cada ciclo.',
+
+        'problem.kicker': 'El problema',
+        'problem.title': '"Confíe en mí, la estrategia es esta" no alcanza.',
+        'problem.body': 'La mayoría de los portafolios modelo del mercado son una caja negra. Usted ve el resultado <strong>después</strong>, rara vez el razonamiento, y casi nunca <strong>cuándo el gestor cambió de idea</strong>. Para decidir con conciencia hay que ver el portafolio, el régimen de mercado que lo justifica y el comentario diario — todo a la vez.',
+
+        'how.kicker': 'Cómo funciona',
+        'how.title': 'Portafolio + régimen + comentario. Siempre sincronizados.',
+        'step1.title': 'Régimen macro detectado',
+        'step1.body': 'AILo clasifica el momento actual (A/B/C/D) con base en inflación, crecimiento, volatilidad y ciclo BTC. Cada régimen tiene una asignación objetivo.',
+        'step2.title': 'Asignación publicada',
+        'step2.body': 'Las posiciones del Oracle Portfolio, pesos, bandas de tolerancia y precios en vivo — todos visibles en su dashboard desde el primer día.',
+        'step3.title': 'Comentario diario',
+        'step3.body': 'Todos los días a las 11h, AILo explica en lenguaje natural por qué la asignación sigue como está — o por qué va a cambiar en los próximos días.',
+
+        'video.kicker': 'Video',
+        'video.title': 'Véalo en 55 segundos.',
+        'video.sub': 'Grabación real del Oracle Portfolio en el dashboard: régimen actual, KPIs, donut de composición, chart vs benchmarks (VT, SPY, QQQ, BTC) y las 8 posiciones en vivo.',
+        'video.placeholder': 'Video próximamente',
+        'video.caption': '55s · Sin narración · Subtítulos en español',
+
+        'why.kicker': 'Para qué sirve',
+        'why.title': 'Tres formas de usarlo.',
+        'why.1.title': 'Como benchmark',
+        'why.1.body': 'Compare su portafolio personal contra un portafolio del "régimen actual" para ver si está alineado con el momento macro.',
+        'why.2.title': 'Como inspiración',
+        'why.2.body': 'Vea qué clases están presentes, en qué proporción, y descubra ideas (URA, VTIP, PAXG) que quizás aún no conozca.',
+        'why.3.title': 'Para aprender',
+        'why.3.body': 'El comentario diario en español muestra el porqué de cada decisión. Es un curso práctico de asignación, disfrazado de portafolio.',
+
+        'example.kicker': 'Estado actual',
+        'example.title': 'Cómo está hoy el portafolio.',
+        'example.sub': '8 posiciones distribuidas entre ETFs, una acción, cripto (oro tokenizado) y caja. Cada activo justificable por el régimen macro vigente.',
+        'example.profile': 'Oracle Portfolio · Régimen B (crecimiento cauteloso)',
+        'example.metaline': 'Inception 2025-Q4 · Actualizado diariamente · <span class="pos">8 posiciones</span>',
+        'regime.label': 'Régimen B · crecimiento cauteloso',
+
+        'table.ticker': 'Ticker',
+        'table.weight': 'Peso',
+        'table.name': 'Nombre',
+        'table.class': 'Clase',
+
+        'asset.qqqm': 'Nasdaq-100 (low cost)',
+        'asset.paxg': 'Oro tokenizado',
+        'asset.smh':  'Semiconductores',
+        'asset.nvda': 'Nvidia',
+        'asset.vtip': 'TIPS corto plazo',
+        'asset.vxus': 'Acciones ex-EE.UU.',
+        'asset.ura':  'Uranio / nuclear',
+        'asset.cash': 'USD / treasuries cortas',
+
+        'class.etf':    'ETF',
+        'class.stock':  'Acción',
+        'class.crypto': 'Cripto',
+        'class.cash':   'Caja',
+
+        'commentary.label': 'Comentario de AILo (extracto)',
+        'commentary.body': '"Mantenemos la exposición a tecnología (<strong>QQQM + SMH + NVDA = 43%</strong>) pero con paracaídas: <strong>15% en oro</strong> y <strong>12% en TIPS</strong> cubren una reacción inflacionaria. <strong>URA al 10%</strong> sigue justificado por la tesis estructural de energía nuclear. Caja al 10% permite actuar si el VIX supera los 25."',
+
+        'disclaimer': 'Oracle Portfolio es un portafolio modelo educativo mantenido por AILo. No es recomendación de compra o venta — cada cliente decide si lo replica, adapta o ignora. Datos reales de producción; los pesos pueden variar ligeramente.',
+
+        'cta.title': '¿Quiere ver el Oracle <span class="highlight">al lado</span> de su portafolio?',
+        'cta.sub': 'Un clic en el dashboard y ambos aparecen lado a lado, con pesos, régimen y comentario del día. US$ 39/mes, sin permanencia.',
+        'cta.button': 'Empezar ahora →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — Análisis con IA, educación. No es recomendación de inversión.',
+        'footer.demos': 'Todas las demos', 'footer.main': 'Sitio principal', 'footer.privacy': 'Privacidad', 'footer.terms': 'Términos',
+      },
+
+      en: {
+        'html.lang': 'en',
+        'meta.title': 'Oracle Portfolio — Sentinel Invest',
+        'meta.description': 'The AILo model portfolio in real time: macro regime, holdings, benchmarks and daily commentary — transparent and auditable.',
+        'lang.flag': '🇺🇸', 'lang.code': 'EN',
+        'nav.back': '← All demos',
+        'breadcrumb.demos': 'Demos',
+        'breadcrumb.current': 'Oracle Portfolio',
+        'hero.badge': '🔮 Feature · 02',
+        'hero.title': '<span class="highlight">Oracle Portfolio</span>.<br/>The AILo model portfolio, in real time.',
+        'hero.lede': 'A real portfolio with real holdings, live prices, and the current macro regime — run by AILo and auditable by you. Use it as a benchmark, for inspiration, or simply to follow how an institutional-style investor navigates each cycle.',
+
+        'problem.kicker': 'The problem',
+        'problem.title': '"Trust me, the strategy is this" isn\'t enough.',
+        'problem.body': 'Most model portfolios on the market are black boxes. You see the outcome <strong>after the fact</strong>, rarely the reasoning, and almost never <strong>when the manager changed their mind</strong>. To decide consciously you need to see the portfolio, the market regime that justifies it, and the daily commentary — all at once.',
+
+        'how.kicker': 'How it works',
+        'how.title': 'Portfolio + regime + commentary. Always in sync.',
+        'step1.title': 'Macro regime detected',
+        'step1.body': 'AILo classifies the current moment (A/B/C/D) using inflation, growth, volatility and the BTC cycle. Each regime has a target allocation.',
+        'step2.title': 'Allocation published',
+        'step2.body': 'Oracle Portfolio\'s holdings, weights, tolerance bands and live prices — all visible in your dashboard from day one.',
+        'step3.title': 'Daily commentary',
+        'step3.body': 'Every day at 11am, AILo explains in plain language why the allocation stays as is — or why it is about to change.',
+
+        'video.kicker': 'Video',
+        'video.title': 'See it in 55 seconds.',
+        'video.sub': 'Real recording of Oracle Portfolio in the dashboard: current regime, KPIs, composition donut, chart vs benchmarks (VT, SPY, QQQ, BTC) and the 8 live holdings.',
+        'video.placeholder': 'Video coming soon',
+        'video.caption': '55s · No voiceover · English subtitles',
+
+        'why.kicker': 'What it is for',
+        'why.title': 'Three ways to use it.',
+        'why.1.title': 'As a benchmark',
+        'why.1.body': 'Compare your own portfolio against a "current regime" portfolio to see whether you are aligned with the macro moment.',
+        'why.2.title': 'For inspiration',
+        'why.2.body': 'See which asset classes are present, in what proportion, and discover ideas (URA, VTIP, PAXG) you may not know yet.',
+        'why.3.title': 'To learn',
+        'why.3.body': 'The daily commentary shows the why behind each choice. A hands-on allocation course, disguised as a portfolio.',
+
+        'example.kicker': 'Current state',
+        'example.title': 'How the portfolio stands today.',
+        'example.sub': '8 positions spread across ETFs, one stock, crypto (tokenized gold) and cash. Every asset justifiable by the macro regime in place.',
+        'example.profile': 'Oracle Portfolio · Regime B (cautious growth)',
+        'example.metaline': 'Inception 2025-Q4 · Updated daily · <span class="pos">8 positions</span>',
+        'regime.label': 'Regime B · cautious growth',
+
+        'table.ticker': 'Ticker',
+        'table.weight': 'Weight',
+        'table.name': 'Name',
+        'table.class': 'Class',
+
+        'asset.qqqm': 'Nasdaq-100 (low cost)',
+        'asset.paxg': 'Tokenized gold',
+        'asset.smh':  'Semiconductors',
+        'asset.nvda': 'Nvidia',
+        'asset.vtip': 'Short-term TIPS',
+        'asset.vxus': 'Ex-US equities',
+        'asset.ura':  'Uranium / nuclear',
+        'asset.cash': 'USD / short treasuries',
+
+        'class.etf':    'ETF',
+        'class.stock':  'Stock',
+        'class.crypto': 'Crypto',
+        'class.cash':   'Cash',
+
+        'commentary.label': 'AILo commentary (excerpt)',
+        'commentary.body': '"We keep tech exposure (<strong>QQQM + SMH + NVDA = 43%</strong>) but with parachutes: <strong>15% in gold</strong> and <strong>12% in TIPS</strong> cover an inflationary surprise. <strong>URA at 10%</strong> still holds on the structural nuclear-energy thesis. 10% cash gives us room to move if VIX breaks above 25."',
+
+        'disclaimer': 'Oracle Portfolio is an educational model portfolio maintained by AILo. Not a buy or sell recommendation — each client decides whether to replicate, adapt or ignore. Real production data; weights may vary slightly.',
+
+        'cta.title': 'Want to see Oracle <span class="highlight">beside</span> your portfolio?',
+        'cta.sub': 'One click in the dashboard and both show side by side, with weights, regime and the day\'s commentary. US$ 39/month, no lock-in.',
+        'cta.button': 'Get started →',
+
+        'footer.copyright': '© 2026 Sentinel Invest — AI analysis, education. Not investment advice.',
+        'footer.demos': 'All demos', 'footer.main': 'Main site', 'footer.privacy': 'Privacy', 'footer.terms': 'Terms',
+      },
+    };
+
+    function detectLang() {
+      const saved = localStorage.getItem('sentinel-lang');
+      if (saved && T[saved]) return saved;
+      const b = (navigator.language || 'en').toLowerCase();
+      if (b.startsWith('pt')) return 'pt';
+      if (b.startsWith('es')) return 'es';
+      return 'en';
+    }
+
+    function applyLang(lang) {
+      const d = T[lang];
+      document.documentElement.lang = d['html.lang'];
+      document.title = d['meta.title'];
+      const md = document.querySelector('meta[name="description"]');
+      if (md) md.setAttribute('content', d['meta.description']);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const v = d[el.dataset.i18n];
+        if (v !== undefined) el.textContent = v;
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const v = d[el.dataset.i18nHtml];
+        if (v !== undefined) el.innerHTML = v;
+      });
+
+      document.getElementById('currentFlag').textContent = d['lang.flag'];
+      document.getElementById('currentCode').textContent = d['lang.code'];
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('sentinel-lang', lang);
+    }
+
+    const langBtn      = document.getElementById('langBtn');
+    const langDropdown = document.getElementById('langDropdown');
+
+    const open  = () => { langDropdown.classList.add('open');    langBtn.setAttribute('aria-expanded', 'true');  };
+    const close = () => { langDropdown.classList.remove('open'); langBtn.setAttribute('aria-expanded', 'false'); };
+
+    langBtn.addEventListener('click', e => { e.stopPropagation(); langDropdown.classList.contains('open') ? close() : open(); });
+    document.addEventListener('click', close);
+    langDropdown.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', () => { applyLang(btn.dataset.lang); close(); });
+    });
+
+    applyLang(detectLang());
+  </script>
+
+</body>
+</html>
