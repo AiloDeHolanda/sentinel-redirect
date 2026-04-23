@@ -609,6 +609,9 @@
       text-align: center;
       line-height: 1.6;
     }
+
+    /* ── AILo branding — L itálico em todas as ocorrências ────────── */
+    .ailo-l { font-style: italic; font-weight: inherit; }
   </style>
 </head>
 <body>
@@ -1016,6 +1019,42 @@
       });
 
       localStorage.setItem('sentinel-lang', lang);
+
+      italicizeAILo();
+    }
+
+    /* ── AILo branding — italiciza o "L" em cada ocorrência de "AILo" ── */
+    function italicizeAILo() {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          if (!n.nodeValue || n.nodeValue.indexOf('AILo') === -1) return NodeFilter.FILTER_REJECT;
+          const p = n.parentNode;
+          if (!p) return NodeFilter.FILTER_REJECT;
+          const t = p.tagName;
+          if (t === 'SCRIPT' || t === 'STYLE' || t === 'TITLE' || t === 'TEXTAREA') return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes = [];
+      let n; while ((n = walker.nextNode())) nodes.push(n);
+      nodes.forEach(node => {
+        const parts = node.nodeValue.split(/(AILo)/g);
+        if (parts.length === 1) return;
+        const frag = document.createDocumentFragment();
+        parts.forEach(part => {
+          if (part === 'AILo') {
+            frag.appendChild(document.createTextNode('AI'));
+            const i = document.createElement('i');
+            i.className = 'ailo-l';
+            i.textContent = 'L';
+            frag.appendChild(i);
+            frag.appendChild(document.createTextNode('o'));
+          } else if (part) {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        node.parentNode.replaceChild(frag, node);
+      });
     }
 
     const langBtn      = document.getElementById('langBtn');
