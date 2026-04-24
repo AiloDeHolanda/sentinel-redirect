@@ -1612,6 +1612,13 @@
     /* ── AILo branding — L itálico em todas as ocorrências ────────── */
     .ailo-l { font-style: italic; font-weight: inherit; }
 
+    /* ── Educational mode — esconde elementos comerciais ─────────────
+       Controlado por <body class="educational-mode">. Remover a classe
+       devolve a landing ao modo de venda com zero mudanças no conteúdo. */
+    body.educational-mode .commerce-only { display: none !important; }
+    body.educational-mode .pricing-tiers { justify-content: center; }
+    body.educational-mode .pricing-tiers .tier-card { max-width: 460px; flex: 0 1 460px; }
+
     /* ── AILo Logotype ─────────────────────────────────────────────── */
     .ailo-logotype {
       font-family: 'Cormorant Garamond', serif;
@@ -1631,7 +1638,7 @@
     }
   </style>
 </head>
-<body>
+<body class="educational-mode">
 
   <!-- ── NAV ─────────────────────────────────────────────────────── -->
   <nav class="nav">
@@ -2110,7 +2117,7 @@
       <div class="pricing-tiers">
 
         <!-- Tier 1 · Early Adopter (destaque) -->
-        <div class="tier-card is-featured fade-up">
+        <div class="tier-card is-featured fade-up commerce-only">
           <span class="tier-ribbon" data-i18n="pricing.tier_ea.ribbon"></span>
           <div class="tier-name" data-i18n="pricing.tier_ea.name"></div>
           <div class="tier-sub" data-i18n="pricing.tier_ea.sub"></div>
@@ -2139,7 +2146,7 @@
         </div>
 
         <!-- Tier 2 · Regular ($39) -->
-        <div class="tier-card fade-up fade-up-delay-1">
+        <div class="tier-card fade-up fade-up-delay-1 commerce-only">
           <div class="tier-name" data-i18n="pricing.tier_reg.name"></div>
           <div class="tier-sub" data-i18n="pricing.tier_reg.sub"></div>
           <div class="tier-price">
@@ -2185,7 +2192,7 @@
 
       </div>
 
-      <p class="pricing-note" style="text-align:center;margin-top:32px;max-width:620px;margin-inline:auto;" data-i18n-html="pricing.footnote"></p>
+      <p class="pricing-note commerce-only" style="text-align:center;margin-top:32px;max-width:620px;margin-inline:auto;" data-i18n-html="pricing.footnote"></p>
     </div>
   </section>
 
@@ -2200,27 +2207,27 @@
 
       <div class="faq-list">
         <details class="faq-item">
-          <summary data-i18n="faq.q1"></summary>
+          <summary><span data-i18n="faq.q1"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a1"></div>
         </details>
-        <details class="faq-item">
-          <summary data-i18n="faq.q2"></summary>
+        <details class="faq-item commerce-only">
+          <summary><span data-i18n="faq.q2"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a2"></div>
         </details>
-        <details class="faq-item">
-          <summary data-i18n="faq.q3"></summary>
+        <details class="faq-item commerce-only">
+          <summary><span data-i18n="faq.q3"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a3"></div>
         </details>
         <details class="faq-item">
-          <summary data-i18n="faq.q4"></summary>
+          <summary><span data-i18n="faq.q4"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a4"></div>
         </details>
         <details class="faq-item">
-          <summary data-i18n="faq.q5"></summary>
+          <summary><span data-i18n="faq.q5"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a5"></div>
         </details>
         <details class="faq-item">
-          <summary data-i18n="faq.q6"></summary>
+          <summary><span data-i18n="faq.q6"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a6"></div>
         </details>
       </div>
@@ -3086,6 +3093,62 @@
       }
     };
 
+    /* ── Educational-mode overrides ────────────────────────────────
+       Activo quando <body> tem classe "educational-mode". Sobrepõe
+       apenas as chaves cujo texto comercial continua visível (CTAs,
+       pricing sub/title, finalcta, FAQ a4/a6, waitlist toast). As
+       strings originais ficam intactas em T[lang] para reverter. */
+    const EDU_OVERRIDES = {
+      pt: {
+        'meta.description':  'AILo: app educacional de análise de portfólio com IA. Em fase de beta fechado por convite.',
+        'nav.cta':           'Pedir convite',
+        'hero.badge':        'App educacional · Beta fechado',
+        'hero.cta_primary':  'Pedir convite beta →',
+        'pricing.badge':     'Acesso · Beta educacional',
+        'pricing.title':     'Acesso por <span class="highlight">convite.</span>',
+        'pricing.sub':       'Estamos em fase educacional fechada, testando o produto com um grupo pequeno de convidados. O acesso é gratuito durante este período.',
+        'finalcta.badge':    'App educacional',
+        'finalcta.sub':      'Fase educacional fechada. Acesso por convite.',
+        'finalcta.cta':      'Pedir convite →',
+        'faq.a4':            'Sim, sem compromisso. Durante a fase educacional o acesso é por convite e você pode sair quando quiser.',
+        'faq.a6':            'Sim. Guardamos apenas o que você nos diz (ativos, quantidades, preço médio, objetivos). Não pedimos login da corretora nem acesso à conta. Consulte a <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidade</a>.',
+        'waitlist.title':    'Acesso por convite',
+        'waitlist.body':     'Estamos em fase educacional fechada. Deixa teu contato para te avisarmos quando abrirmos novos convites.',
+      },
+      es: {
+        'meta.description':  'AILo: app educacional de análisis de portafolio con IA. En fase de beta cerrada por invitación.',
+        'nav.cta':           'Solicitar invitación',
+        'hero.badge':        'App educacional · Beta cerrada',
+        'hero.cta_primary':  'Solicitar invitación beta →',
+        'pricing.badge':     'Acceso · Beta educacional',
+        'pricing.title':     'Acceso por <span class="highlight">invitación.</span>',
+        'pricing.sub':       'Estamos en fase educacional cerrada, probando el producto con un grupo pequeño de invitados. El acceso es gratuito durante este período.',
+        'finalcta.badge':    'App educacional',
+        'finalcta.sub':      'Fase educacional cerrada. Acceso por invitación.',
+        'finalcta.cta':      'Solicitar invitación →',
+        'faq.a4':            'Sí, sin compromiso. Durante la fase educacional el acceso es por invitación y puedes salir cuando quieras.',
+        'faq.a6':            'Sí. Guardamos solo lo que tú nos dices (activos, cantidades, precio promedio, objetivos). No pedimos login de corredora ni acceso a tu cuenta. Consulta la <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidad</a>.',
+        'waitlist.title':    'Acceso por invitación',
+        'waitlist.body':     'Estamos en fase educacional cerrada. Déjanos tu contacto para avisarte cuando abramos nuevas invitaciones.',
+      },
+      en: {
+        'meta.description':  'AILo: educational AI-powered portfolio analysis app. Currently in closed invite-only beta.',
+        'nav.cta':           'Request invite',
+        'hero.badge':        'Educational app · Closed beta',
+        'hero.cta_primary':  'Request beta invite →',
+        'pricing.badge':     'Access · Educational beta',
+        'pricing.title':     'Invite-only <span class="highlight">access.</span>',
+        'pricing.sub':       'We are in a closed educational phase, testing the product with a small group of invitees. Access is free during this period.',
+        'finalcta.badge':    'Educational app',
+        'finalcta.sub':      'Closed educational phase. Access by invitation.',
+        'finalcta.cta':      'Request invite →',
+        'faq.a4':            'Yes, no commitment. During the educational phase access is by invitation and you can leave anytime.',
+        'faq.a6':            'Yes. We only store what you tell us (assets, quantities, average cost, goals). We don\'t ask for broker credentials or account access. See the <a href="https://app.sentinelinvest.co/privacy.html">Privacy Policy</a>.',
+        'waitlist.title':    'Invite-only access',
+        'waitlist.body':     'We are in a closed educational phase. Leave your contact so we can notify you when new invitations open.',
+      }
+    };
+
     /* ── Language detection ───────────────────────────────────────── */
     function detectLang() {
       const saved = localStorage.getItem('sentinel-lang');
@@ -3098,7 +3161,10 @@
 
     /* ── Apply translations ───────────────────────────────────────── */
     function applyLang(lang) {
-      const d = T[lang];
+      const educational = document.body.classList.contains('educational-mode');
+      const d = educational && EDU_OVERRIDES[lang]
+        ? { ...T[lang], ...EDU_OVERRIDES[lang] }
+        : T[lang];
 
       document.documentElement.lang = d['html.lang'];
       document.title = d['meta.title'];
