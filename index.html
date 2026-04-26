@@ -2500,17 +2500,18 @@
       </div>
       <h2 class="section-title" data-i18n="faq.title"></h2>
       <div class="section-divider"></div>
+      <p class="section-subtitle" data-i18n="faq.intro"></p>
 
       <div class="faq-list">
         <details class="faq-item">
           <summary><span data-i18n="faq.q1"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a1"></div>
         </details>
-        <details class="faq-item commerce-only">
+        <details class="faq-item">
           <summary><span data-i18n="faq.q2"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a2"></div>
         </details>
-        <details class="faq-item commerce-only">
+        <details class="faq-item">
           <summary><span data-i18n="faq.q3"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a3"></div>
         </details>
@@ -2522,9 +2523,21 @@
           <summary><span data-i18n="faq.q5"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a5"></div>
         </details>
-        <details class="faq-item">
+        <details class="faq-item commerce-only">
           <summary><span data-i18n="faq.q6"></span></summary>
           <div class="faq-answer" data-i18n-html="faq.a6"></div>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq.q7"></span></summary>
+          <div class="faq-answer" data-i18n-html="faq.a7"></div>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq.q8"></span></summary>
+          <div class="faq-answer" data-i18n-html="faq.a8"></div>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq.q9"></span></summary>
+          <div class="faq-answer" data-i18n-html="faq.a9"></div>
         </details>
       </div>
     </div>
@@ -2883,19 +2896,26 @@
         'comparison.disclaimer':            'Comparação geral baseada em ofertas típicas de cada categoria. Concorrentes específicos podem variar. Atualizado em 2026-04-26.',
         /* faq */
         'faq.badge': 'Perguntas frequentes',
-        'faq.title': 'Dúvidas comuns.',
-        'faq.q1': 'Isso é recomendação de compra ou venda?',
-        'faq.a1': '<strong>Não.</strong> O Sentinel Invest oferece análise, monitoramento e educação sobre a sua carteira. Não somos analista nem assessor credenciado pela CVM e não emitimos recomendações de compra ou venda de ativos específicos. Todas as decisões de investimento são da sua responsabilidade. Para recomendações formais, consulte um profissional certificado.',
-        'faq.q2': 'Preciso de cartão para testar?',
-        'faq.a2': 'Sim. Para começar o teste de 14 dias exigimos cartão de crédito válido via Stripe. A cobrança só acontece no dia 15, quando o teste termina — se você cancelar antes, <strong>não é cobrado</strong>.',
-        'faq.q3': 'Como é o preço Early Adopter?',
-        'faq.a3': 'Os primeiros <strong>50 clientes</strong> pagam $25/mês para sempre, enquanto mantiverem a assinatura ativa. A partir do cliente 51 o preço é $39/mês. Se você cancelar e voltar depois, o preço aplicável é o vigente no momento do retorno.',
-        'faq.q4': 'Posso cancelar quando quiser?',
-        'faq.a4': 'Sim, sem taxas. Cancela pelo portal do cliente a qualquer momento. Se cancelar durante os 14 dias de teste, não é cobrado. Se cancelar depois, usa o serviço até ao fim do ciclo já pago.',
-        'faq.q5': 'O AILo executa ordens na minha corretora?',
-        'faq.a5': '<strong>Não.</strong> O Sentinel Invest não é uma corretora. Não temos acesso aos seus investimentos nem executamos ordens. Você continua comprando e vendendo na sua corretora de sempre (XP, Rico, Clear, NuInvest, Avenue, Nomad, Binance, etc.). O AILo analisa, alerta e responde — a ordem é sua.',
-        'faq.q6': 'Os meus dados estão seguros?',
-        'faq.a6': 'Sim. Guardamos apenas o que você nos diz (ativos, quantidades, preço médio, objetivos). Não pedimos login da corretora nem acesso à conta. Pagamentos processados pela Stripe (PCI-DSS). Consulte a <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidade</a>.',
+        'faq.title': 'Perguntas que ouvimos com frequência',
+        'faq.intro': 'Se a sua pergunta não está aqui, manda direto no Telegram ou e-mail. Respondemos pessoalmente.',
+        'faq.q1': 'O que exatamente a AILo faz?',
+        'faq.a1': 'A AILo analisa a sua carteira de investimentos com regras públicas e auditáveis. Mostra concentração, risco, retorno real em qualquer moeda, comparação contra o benchmark VT, e cenários de rebalanceamento — tudo sem tomar custódia do seu dinheiro e sem recomendar ativo específico.',
+        'faq.q2': 'Vocês tomam meu dinheiro? Têm acesso à minha corretora?',
+        'faq.a2': '<strong>Não, nunca.</strong> A AILo não opera, não recebe transferências, não tem credencial nenhuma da sua corretora. Você nos passa os dados das suas posições (manual ou via CSV); nós analisamos. Seu dinheiro continua onde sempre esteve.',
+        'faq.q3': 'Vocês recomendam ações ou ETFs específicos pra eu comprar?',
+        'faq.a3': '<strong>Não.</strong> Publicamos a Oracle Portfolio (nossa carteira-modelo de US$ 1.000 fixos, visível na seção <a href="#track-record">Track Record</a> desta página) e analisamos a sua carteira contra regras transparentes. Mostramos cenários, avisamos sobre concentração ou drift do benchmark — mas a decisão de comprar, vender ou manter é sempre sua.',
+        'faq.q4': 'Quanto tempo leva pra começar a usar?',
+        'faq.a4': 'Entre 3 e 10 minutos. Você cria conta, importa a carteira (CSV ou digita as posições no wizard), e a primeira análise sai imediatamente. Briefings e alertas começam no dia seguinte.',
+        'faq.q5': 'E se eu não usar Telegram?',
+        'faq.a5': 'Briefings diários, resumo semanal e alertas saem por Telegram, e-mail ou ambos — você escolhe na configuração. O dashboard web fica sempre disponível também. Suporte direto continua via Telegram (ou e-mail, se preferir).',
+        'faq.q6': 'Como funciona o pagamento em USDC? Aceitam Pix?',
+        'faq.a6': 'Hoje recebemos US$ 39/mês em USDC na rede Polygon — instruções claras no onboarding, com endereço único por cliente para identificação automática do pagamento. Pix BRL e cartão internacional chegam nas próximas semanas.',
+        'faq.q7': 'Posso cancelar quando quiser?',
+        'faq.a7': 'Sim, a qualquer momento, sem multa, sem retenção. Não cobramos por ciclo iniciado se você pedir cancelamento antes da renovação. Você sempre pode solicitar uma cópia dos seus dados (LGPD/GDPR aplicáveis).',
+        'faq.q8': 'Vocês conectam com minha corretora automaticamente? Ajudam com imposto de renda?',
+        'faq.a8': 'Hoje a importação é via CSV ou digitação manual no wizard. Conectores diretos com corretoras (Open Finance no Brasil, Plaid nos EUA) e parsers dedicados por corretora (Avenue, Inter, Degiro, IBKR) estão no roadmap. Sobre imposto de renda: a AILo não substitui contador, mas organiza histórico de transações e dividendos num formato que facilita preencher a declaração.',
+        'faq.q9': 'O que acontece com meus dados? Por que confiar numa startup pequena?',
+        'faq.a9': 'Seus dados ficam num banco de dados criptografado em servidor próprio (não em terceiros), nunca são vendidos nem compartilhados, e você pode pedir exclusão a qualquer momento (LGPD/GDPR). Confiança se constrói com transparência: a Oracle e seus resultados são públicos, auditáveis e medidos contra o benchmark VT há meses — antes de você assinar, você já consegue ver se a régua bate (veja a seção <a href="#track-record">Track Record</a> acima).',
         /* final cta */
         'finalcta.badge': 'Pronto para começar',
         'finalcta.title': 'Sua carteira merece<br/><span class="highlight">análise de verdade.</span>',
@@ -3150,19 +3170,26 @@
         'comparison.disclaimer':            'Comparación general basada en ofertas típicas de cada categoría. Competidores específicos pueden variar. Actualizado el 2026-04-26.',
         /* faq */
         'faq.badge': 'Preguntas frecuentes',
-        'faq.title': 'Dudas comunes.',
-        'faq.q1': '¿Esto es recomendación de compra o venta?',
-        'faq.a1': '<strong>No.</strong> Sentinel Invest entrega análisis, monitoreo y educación sobre tu cartera. No somos asesores de inversión registrados y no emitimos recomendaciones de compra o venta de activos específicos. Todas las decisiones son tu responsabilidad. Para recomendaciones formales, consulta a un profesional certificado.',
-        'faq.q2': '¿Necesito tarjeta para probar?',
-        'faq.a2': 'Sí. Para iniciar los 14 días de prueba pedimos tarjeta de crédito válida vía Stripe. El cobro solo ocurre el día 15, cuando termina la prueba — si cancelas antes, <strong>no te cobramos</strong>.',
-        'faq.q3': '¿Cómo funciona el precio Early Adopter?',
-        'faq.a3': 'Los primeros <strong>50 clientes</strong> pagan $25/mes para siempre mientras mantengan la suscripción activa. Desde el cliente 51 el precio es $39/mes. Si cancelas y vuelves después, aplicamos el precio vigente al momento del regreso.',
-        'faq.q4': '¿Puedo cancelar cuando quiera?',
-        'faq.a4': 'Sí, sin cargos. Cancelas por el portal del cliente en cualquier momento. Si cancelas durante los 14 días de prueba, no te cobramos. Si cancelas después, usas el servicio hasta el fin del ciclo ya pagado.',
-        'faq.q5': '¿AILo ejecuta órdenes en mi corredora?',
-        'faq.a5': '<strong>No.</strong> Sentinel Invest no es una corredora. No tenemos acceso a tus inversiones ni ejecutamos órdenes. Sigues comprando y vendiendo en tu corredora de siempre. AILo analiza, alerta y responde — la orden la pones tú.',
-        'faq.q6': '¿Mis datos están seguros?',
-        'faq.a6': 'Sí. Guardamos solo lo que tú nos dices (activos, cantidades, precio promedio, objetivos). No pedimos login de corredora ni acceso a tu cuenta. Pagos procesados por Stripe (PCI-DSS). Consulta la <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidad</a>.',
+        'faq.title': 'Preguntas que escuchamos con frecuencia',
+        'faq.intro': 'Si tu pregunta no está aquí, mándala directo por Telegram o e-mail. Respondemos personalmente.',
+        'faq.q1': '¿Qué hace exactamente AILo?',
+        'faq.a1': 'AILo analiza tu cartera de inversiones con reglas públicas y auditables. Muestra concentración, riesgo, retorno real en cualquier moneda, comparación contra el benchmark VT, y escenarios de rebalanceo — todo sin tomar custodia de tu dinero y sin recomendar activos específicos.',
+        'faq.q2': '¿Toman mi dinero? ¿Tienen acceso a mi corredor?',
+        'faq.a2': '<strong>No, nunca.</strong> AILo no opera, no recibe transferencias, no tiene credenciales de tu corredor. Tú nos das los datos de tus posiciones (manual o vía CSV); nosotros analizamos. Tu dinero sigue donde siempre estuvo.',
+        'faq.q3': '¿Recomiendan acciones o ETFs específicos para comprar?',
+        'faq.a3': '<strong>No.</strong> Publicamos el Oracle Portfolio (nuestra cartera modelo de US$ 1.000 fijos, visible en la sección <a href="#track-record">Track Record</a> de esta página) y analizamos tu cartera contra reglas transparentes. Mostramos escenarios, te avisamos sobre concentración o desviación del benchmark — pero la decisión de comprar, vender o mantener siempre es tuya.',
+        'faq.q4': '¿Cuánto tiempo lleva empezar a usar?',
+        'faq.a4': 'Entre 3 y 10 minutos. Creas una cuenta, importas tu cartera (CSV o escribes las posiciones en el wizard), y el primer análisis sale al instante. Briefings y alertas empiezan al día siguiente.',
+        'faq.q5': '¿Y si no uso Telegram?',
+        'faq.a5': 'Briefings diarios, resumen semanal y alertas salen por Telegram, e-mail o ambos — tú eliges en la configuración. El dashboard web siempre está disponible. El soporte directo sigue por Telegram (o e-mail, si prefieres).',
+        'faq.q6': '¿Cómo funciona el pago en USDC? ¿Aceptan Pix?',
+        'faq.a6': 'Hoy recibimos US$ 39/mes en USDC en la red Polygon — instrucciones claras en el onboarding, con dirección única por cliente para identificación automática del pago. Pix BRL y tarjeta internacional llegan en las próximas semanas.',
+        'faq.q7': '¿Puedo cancelar cuando quiera?',
+        'faq.a7': 'Sí, en cualquier momento, sin multa, sin retención. No cobramos por un ciclo iniciado si pides cancelar antes de la renovación. Siempre puedes solicitar una copia de tus datos (LGPD/GDPR aplicables).',
+        'faq.q8': '¿Se conectan con mi corredor automáticamente? ¿Ayudan con impuestos?',
+        'faq.a8': 'Hoy la importación es vía CSV o entrada manual en el wizard. Conectores directos con corredores (Open Finance en Brasil, Plaid en EE.UU.) y parsers dedicados por corredor (Avenue, Inter, Degiro, IBKR) están en el roadmap. Sobre impuestos: AILo no reemplaza a tu contador, pero organiza el historial de transacciones y dividendos en un formato que facilita declarar.',
+        'faq.q9': '¿Qué pasa con mis datos? ¿Por qué confiar en una startup pequeña?',
+        'faq.a9': 'Tus datos viven en una base de datos cifrada en servidor propio (no terceros), nunca se venden ni se comparten, y puedes solicitar borrado en cualquier momento (LGPD/GDPR). La confianza se construye con transparencia: el Oracle y sus resultados son públicos, auditables y medidos contra el benchmark VT hace meses — antes de suscribirte, ya puedes ver si la regla aguanta (ver la sección <a href="#track-record">Track Record</a> arriba).',
         /* final cta */
         'finalcta.badge': 'Listo para empezar',
         'finalcta.title': 'Tu cartera merece<br/><span class="highlight">análisis de verdad.</span>',
@@ -3415,19 +3442,26 @@
         'comparison.disclaimer':            'General comparison based on typical offerings in each category. Specific competitors may vary. Updated 2026-04-26.',
         /* faq */
         'faq.badge': 'Frequently asked',
-        'faq.title': 'Common questions.',
-        'faq.q1': 'Is this a buy or sell recommendation?',
-        'faq.a1': '<strong>No.</strong> Sentinel Invest delivers analysis, monitoring and education about your portfolio. We are not a registered investment advisor and we do not issue buy/sell recommendations on specific assets. All investment decisions are your responsibility. For formal recommendations, consult a certified professional.',
-        'faq.q2': 'Do I need a credit card to try?',
-        'faq.a2': 'Yes. To start the 14-day trial we require a valid credit card via Stripe. You\'re only charged on day 15, when the trial ends — cancel before and <strong>you\'re not charged</strong>.',
-        'faq.q3': 'How does Early Adopter pricing work?',
-        'faq.a3': 'The first <strong>50 clients</strong> pay $25/mo forever, as long as they keep the subscription active. From client 51 the price is $39/mo. If you cancel and come back later, the price is the one in effect at that moment.',
-        'faq.q4': 'Can I cancel anytime?',
-        'faq.a4': 'Yes, no fees. Cancel through the client portal anytime. If you cancel during the 14-day trial, you\'re not charged. If you cancel later, you keep the service until the end of the already-paid cycle.',
-        'faq.q5': 'Does AILo execute orders at my broker?',
-        'faq.a5': '<strong>No.</strong> Sentinel Invest is not a broker. We don\'t have access to your holdings and don\'t execute orders. You keep buying and selling at your broker. AILo analyzes, alerts and answers — you place the order.',
-        'faq.q6': 'Is my data safe?',
-        'faq.a6': 'Yes. We only store what you tell us (assets, quantities, average cost, goals). We don\'t ask for broker credentials or account access. Payments handled by Stripe (PCI-DSS). See the <a href="https://app.sentinelinvest.co/privacy.html">Privacy Policy</a>.',
+        'faq.title': 'Questions we hear often',
+        'faq.intro': 'If your question isn\'t here, send it directly via Telegram or email. We answer personally.',
+        'faq.q1': 'What exactly does AILo do?',
+        'faq.a1': 'AILo analyzes your investment portfolio using public, auditable rules. It shows concentration, risk, real returns in any currency, comparison against the VT benchmark, and rebalancing scenarios — all without taking custody of your money and without recommending specific assets.',
+        'faq.q2': 'Do you take my money? Do you have access to my broker?',
+        'faq.a2': '<strong>No, never.</strong> AILo doesn\'t trade, doesn\'t receive transfers, has no credentials to your broker. You give us your position data (manually or via CSV); we analyze. Your money stays where it always was.',
+        'faq.q3': 'Do you recommend specific stocks or ETFs to buy?',
+        'faq.a3': '<strong>No.</strong> We publish the Oracle Portfolio (our flat $1,000 model portfolio, visible in the <a href="#track-record">Track Record</a> section of this page) and analyze your portfolio against transparent rules. We show scenarios, alert you about concentration or benchmark drift — but the decision to buy, sell, or hold is always yours.',
+        'faq.q4': 'How long does it take to get started?',
+        'faq.a4': 'Between 3 and 10 minutes. You create an account, import your portfolio (CSV or type positions in the wizard), and the first analysis runs immediately. Briefings and alerts start the next day.',
+        'faq.q5': 'What if I don\'t use Telegram?',
+        'faq.a5': 'Daily briefings, weekly review, and alerts go out via Telegram, email, or both — you choose in settings. The web dashboard is always available too. Direct support continues via Telegram (or email, if you prefer).',
+        'faq.q6': 'How does USDC payment work? Do you accept Pix?',
+        'faq.a6': 'Today we receive $39/mo in USDC on the Polygon network — clear instructions in onboarding, with a unique address per client for automatic payment identification. Pix BRL and international card are coming in the next few weeks.',
+        'faq.q7': 'Can I cancel anytime?',
+        'faq.a7': 'Yes, anytime, no fee, no retention. We don\'t charge for an initiated cycle if you request cancellation before renewal. You can always request a copy of your data (LGPD/GDPR applicable).',
+        'faq.q8': 'Do you connect with my broker automatically? Do you help with income tax?',
+        'faq.a8': 'Today, import is via CSV or manual entry in the wizard. Direct broker connectors (Open Finance in Brazil, Plaid in the US) and dedicated per-broker parsers (Avenue, Inter, Degiro, IBKR) are on the roadmap. About taxes: AILo doesn\'t replace your accountant, but organizes transaction and dividend history in a format that makes filing easier.',
+        'faq.q9': 'What happens to my data? Why trust a small startup?',
+        'faq.a9': 'Your data lives in an encrypted database on our own server (not third-party), never sold or shared, and you can request deletion at any time (LGPD/GDPR). Trust is built through transparency: the Oracle and its results are public, auditable, and measured against the VT benchmark for months — before you subscribe, you can already see if the ruler holds up (see the <a href="#track-record">Track Record</a> section above).',
         /* final cta */
         'finalcta.badge': 'Ready to start',
         'finalcta.title': 'Your portfolio deserves<br/><span class="highlight">real analysis.</span>',
@@ -3509,8 +3543,10 @@
     /* ── Educational-mode overrides ────────────────────────────────
        Activo quando <body> tem classe "educational-mode". Sobrepõe
        apenas as chaves cujo texto comercial continua visível (CTAs,
-       pricing sub/title, finalcta, FAQ a4/a6, waitlist toast). As
-       strings originais ficam intactas em T[lang] para reverter. */
+       pricing sub/title, finalcta, FAQ a7/a9, waitlist toast). As
+       strings originais ficam intactas em T[lang] para reverter.
+       Note: q6 (USDC payment) é commerce-only no markup — escondida
+       em educational mode sem precisar override. */
     const EDU_OVERRIDES = {
       pt: {
         'meta.description':  'AILo: app educacional de análise de portfólio com IA. Em fase de beta fechado por convite.',
@@ -3523,8 +3559,8 @@
         'finalcta.badge':    'App educacional',
         'finalcta.sub':      'Fase educacional fechada. Acesso por convite.',
         'finalcta.cta':      'Pedir convite →',
-        'faq.a4':            'Sim, sem compromisso. Durante a fase educacional o acesso é por convite e você pode sair quando quiser.',
-        'faq.a6':            'Sim. Guardamos apenas o que você nos diz (ativos, quantidades, preço médio, objetivos). Não pedimos login da corretora nem acesso à conta. Consulte a <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidade</a>.',
+        'faq.a7':            'Sim, sem compromisso. Durante a fase educacional o acesso é por convite e você pode sair quando quiser. Você sempre pode solicitar uma cópia ou exclusão dos seus dados (LGPD/GDPR aplicáveis).',
+        'faq.a9':            'Seus dados ficam num banco de dados criptografado em servidor próprio (não em terceiros), nunca são vendidos nem compartilhados, e você pode pedir exclusão a qualquer momento (LGPD/GDPR). Como estamos em fase educacional fechada, a confiança se constrói publicamente: a Oracle e seus resultados são auditáveis há meses (veja a seção <a href="#track-record">Track Record</a> acima).',
         'waitlist.title':    'Acesso por convite',
         'waitlist.body':     'Estamos em fase educacional fechada. Deixa teu contato para te avisarmos quando abrirmos novos convites.',
       },
@@ -3539,8 +3575,8 @@
         'finalcta.badge':    'App educacional',
         'finalcta.sub':      'Fase educacional cerrada. Acceso por invitación.',
         'finalcta.cta':      'Solicitar invitación →',
-        'faq.a4':            'Sí, sin compromiso. Durante la fase educacional el acceso es por invitación y puedes salir cuando quieras.',
-        'faq.a6':            'Sí. Guardamos solo lo que tú nos dices (activos, cantidades, precio promedio, objetivos). No pedimos login de corredora ni acceso a tu cuenta. Consulta la <a href="https://app.sentinelinvest.co/privacy.html">Política de Privacidad</a>.',
+        'faq.a7':            'Sí, sin compromiso. Durante la fase educacional el acceso es por invitación y puedes salir cuando quieras. Siempre puedes solicitar una copia o borrado de tus datos (LGPD/GDPR aplicables).',
+        'faq.a9':            'Tus datos viven en una base de datos cifrada en servidor propio (no terceros), nunca se venden ni se comparten, y puedes solicitar borrado en cualquier momento (LGPD/GDPR). Como estamos en fase educacional cerrada, la confianza se construye públicamente: el Oracle y sus resultados son auditables hace meses (ver la sección <a href="#track-record">Track Record</a> arriba).',
         'waitlist.title':    'Acceso por invitación',
         'waitlist.body':     'Estamos en fase educacional cerrada. Déjanos tu contacto para avisarte cuando abramos nuevas invitaciones.',
       },
@@ -3555,8 +3591,8 @@
         'finalcta.badge':    'Educational app',
         'finalcta.sub':      'Closed educational phase. Access by invitation.',
         'finalcta.cta':      'Request invite →',
-        'faq.a4':            'Yes, no commitment. During the educational phase access is by invitation and you can leave anytime.',
-        'faq.a6':            'Yes. We only store what you tell us (assets, quantities, average cost, goals). We don\'t ask for broker credentials or account access. See the <a href="https://app.sentinelinvest.co/privacy.html">Privacy Policy</a>.',
+        'faq.a7':            'Yes, no commitment. During the educational phase access is by invitation and you can leave anytime. You can always request a copy or deletion of your data (LGPD/GDPR applicable).',
+        'faq.a9':            'Your data lives in an encrypted database on our own server (not third-party), never sold or shared, and you can request deletion at any time (LGPD/GDPR). As we are in a closed educational phase, trust is built publicly: the Oracle and its results have been auditable for months (see the <a href="#track-record">Track Record</a> section above).',
         'waitlist.title':    'Invite-only access',
         'waitlist.body':     'We are in a closed educational phase. Leave your contact so we can notify you when new invitations open.',
       }
