@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
   <style>
     /* ── Reset & Base ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1495,6 +1496,71 @@
       line-height: 1.6;
     }
 
+    /* ── Track Record público (PR-39) ─────────────────────────────── */
+    .track-record { padding: 96px 0; background: var(--bg); }
+    .track-record-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 40px auto 32px;
+      max-width: 920px;
+    }
+    .track-record-stats .stat {
+      padding: 18px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: center;
+      background: var(--bg-card);
+    }
+    .track-record-stats .stat.highlight {
+      border-color: var(--border-orange);
+      background: var(--orange-subtle);
+    }
+    .track-record-stats .stat-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .track-record-stats .stat-value {
+      display: block;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .track-record-stats .stat-value.positive { color: var(--green); }
+    .track-record-stats .stat-value.negative { color: var(--orange-light); }
+    .track-record-chart-wrapper {
+      position: relative;
+      height: 320px;
+      max-width: 1040px;
+      margin: 24px auto 0;
+    }
+    .track-record-meta {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .track-record-disclaimer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-top: 24px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .track-record-stats { grid-template-columns: repeat(2, 1fr); }
+      .track-record-chart-wrapper { height: 280px; }
+      .track-record-stats .stat-value { font-size: 18px; }
+    }
+
     /* ── Comparison table (vs alternativas) ─────────────────────── */
     .compare-wrap {
       max-width: 1080px;
@@ -1939,6 +2005,45 @@
           <p class="diff-desc"  data-i18n="diff3.desc"></p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ── TRACK RECORD PÚBLICO (PR-39) ─────────────────────────────── -->
+  <section class="track-record" id="track-record">
+    <div class="container">
+      <div class="section-label">
+        <span class="badge" data-i18n="track_record.badge"></span>
+      </div>
+      <h2 class="section-title" data-i18n-html="track_record.title"></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle" data-i18n="track_record.subtitle"></p>
+
+      <div class="track-record-stats" id="trackRecordStats" aria-hidden="true">
+        <div class="stat">
+          <span class="stat-label" data-i18n="track_record.kpi.oracle"></span>
+          <span class="stat-value" id="kpiOracleReturn">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label" data-i18n="track_record.kpi.vt"></span>
+          <span class="stat-value" id="kpiVtReturn">—</span>
+        </div>
+        <div class="stat highlight">
+          <span class="stat-label" data-i18n="track_record.kpi.alpha"></span>
+          <span class="stat-value" id="kpiAlpha">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label" data-i18n="track_record.kpi.since"></span>
+          <span class="stat-value" id="kpiInception">—</span>
+        </div>
+      </div>
+
+      <div class="track-record-chart-wrapper">
+        <canvas id="trackRecordChart" height="320"></canvas>
+      </div>
+
+      <p class="track-record-meta" id="trackRecordMeta" data-i18n="track_record.loading"></p>
+
+      <p class="track-record-disclaimer" data-i18n="track_record.disclaimer"></p>
     </div>
   </section>
 
@@ -2868,6 +2973,17 @@
         'form.success.title':      'Pedido recebido!',
         'form.success.desc':       'Vamos avaliar o seu perfil e responder em até 48h por WhatsApp.',
         'form.success.close':      'Fechar',
+        /* track record (PR-39) */
+        'track_record.badge':      'Track record · Público',
+        'track_record.title':      'A régua é <span class="highlight">pública.</span>',
+        'track_record.subtitle':   'A Oracle Portfolio é pública, auditável e medida contra o benchmark VT desde o primeiro dia. Sem cherry-pick. Sem reset quando o número fica feio.',
+        'track_record.kpi.oracle': 'AILo Oracle',
+        'track_record.kpi.vt':     'VT (mundo passivo)',
+        'track_record.kpi.alpha':  'Alpha vs VT',
+        'track_record.kpi.since':  'Desde',
+        'track_record.loading':    'Carregando dados…',
+        'track_record.meta':       'Atualizado em {date} · {days} dias desde o início',
+        'track_record.disclaimer': 'Resultados passados não garantem resultados futuros. A Oracle é uma carteira-modelo de US$ 1.000 fixos para fins educacionais — não é recomendação de investimento.',
         /* lang */
         'lang.flag': '🇧🇷',
         'lang.code': 'PT',
@@ -3129,6 +3245,17 @@
         'form.success.title':      '¡Pedido recibido!',
         'form.success.desc':       'Evaluaremos tu perfil y responderemos en hasta 48h por WhatsApp.',
         'form.success.close':      'Cerrar',
+        /* track record (PR-39) */
+        'track_record.badge':      'Track record · Público',
+        'track_record.title':      'La regla de medir es <span class="highlight">pública.</span>',
+        'track_record.subtitle':   'El Oracle Portfolio es público, auditable y medido contra el benchmark VT desde el primer día. Sin cherry-pick. Sin reiniciar cuando el número se ve feo.',
+        'track_record.kpi.oracle': 'Oracle AILo',
+        'track_record.kpi.vt':     'VT (mundo pasivo)',
+        'track_record.kpi.alpha':  'Alpha vs VT',
+        'track_record.kpi.since':  'Desde',
+        'track_record.loading':    'Cargando datos…',
+        'track_record.meta':       'Actualizado el {date} · {days} días desde el inicio',
+        'track_record.disclaimer': 'Los resultados pasados no garantizan resultados futuros. El Oracle es una cartera modelo de US$ 1.000 fijos con fines educativos — no es recomendación de inversión.',
         'lang.flag': '🇪🇸',
         'lang.code': 'ES',
       },
@@ -3389,6 +3516,17 @@
         'form.success.title':      'Request received!',
         'form.success.desc':       'We\'ll review your profile and reply within 48h via WhatsApp.',
         'form.success.close':      'Close',
+        /* track record (PR-39) */
+        'track_record.badge':      'Track record · Public',
+        'track_record.title':      'The yardstick is <span class="highlight">public.</span>',
+        'track_record.subtitle':   'The Oracle Portfolio is public, auditable, and measured against the VT benchmark from day one. No cherry-picking. No resetting when the number looks bad.',
+        'track_record.kpi.oracle': 'AILo Oracle',
+        'track_record.kpi.vt':     'VT (passive world)',
+        'track_record.kpi.alpha':  'Alpha vs VT',
+        'track_record.kpi.since':  'Since',
+        'track_record.loading':    'Loading data…',
+        'track_record.meta':       'Updated {date} · {days} days since inception',
+        'track_record.disclaimer': 'Past performance does not guarantee future results. The Oracle is a $1,000 flat model portfolio for educational purposes — not investment advice.',
         'lang.flag': '🇺🇸',
         'lang.code': 'EN',
       }
@@ -3497,6 +3635,7 @@
       localStorage.setItem('sentinel-lang', lang);
 
       italicizeAILo();
+      _renderTrackRecordI18n();
     }
 
     /* ── AILo branding — italiciza o "L" em cada ocorrência de "AILo" ── */
@@ -3719,8 +3858,212 @@
       referralDiv.style.display = this.value === 'referral' ? 'block' : 'none';
     });
 
+    /* ── Track Record público (PR-39) ─────────────────────────────── */
+    const TRACK_RECORD_URL = 'https://app.sentinelinvest.co/api/public/oracle-track-record';
+    let _trackRecordData  = null;
+    let _trackRecordChart = null;
+
+    function _trCurrentLang() {
+      return localStorage.getItem('sentinel-lang') || 'pt';
+    }
+    function _trLocale(lang) {
+      return lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-CL' : 'pt-BR');
+    }
+    function _trFmtPct(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return '—';
+      const sign = v >= 0 ? '+' : '';
+      return sign + v.toFixed(2) + '%';
+    }
+    function _trClassFor(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return '';
+      return v >= 0 ? 'positive' : 'negative';
+    }
+
+    function _renderTrackRecordI18n() {
+      if (!_trackRecordData || _trackRecordData.status !== 'ok') return;
+      const data    = _trackRecordData;
+      const lang    = _trCurrentLang();
+      const dict    = T[lang] || T.pt;
+      const locale  = _trLocale(lang);
+      const stats   = data.stats || {};
+
+      const setKpi = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('positive', 'negative');
+        if (value === null || value === undefined) {
+          el.textContent = '—';
+        } else {
+          el.textContent = _trFmtPct(value);
+          const cls = _trClassFor(value);
+          if (cls) el.classList.add(cls);
+        }
+      };
+      setKpi('kpiOracleReturn', stats.oracle_total_return_pct);
+      setKpi('kpiVtReturn',     stats.vt_total_return_pct);
+      setKpi('kpiAlpha',        stats.alpha_pct);
+
+      const inceptionEl = document.getElementById('kpiInception');
+      if (inceptionEl && data.inception_date) {
+        try {
+          inceptionEl.textContent = new Date(data.inception_date + 'T00:00:00Z')
+            .toLocaleDateString(locale, { year: 'numeric', month: 'short', day: '2-digit' });
+        } catch (_) {
+          inceptionEl.textContent = data.inception_date;
+        }
+      }
+
+      const metaEl = document.getElementById('trackRecordMeta');
+      if (metaEl && data.last_updated) {
+        let updatedStr = data.last_updated;
+        try {
+          updatedStr = new Date(data.last_updated + 'T00:00:00Z')
+            .toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' });
+        } catch (_) { /* fallback to ISO */ }
+        const tpl = (dict['track_record.meta']) || 'Updated {date} · {days} days since inception';
+        metaEl.textContent = tpl
+          .replace('{date}', updatedStr)
+          .replace('{days}', stats.days_since_inception != null ? stats.days_since_inception : '—');
+      }
+    }
+
+    function _hideTrackRecord() {
+      const section = document.getElementById('track-record');
+      if (section) section.style.display = 'none';
+    }
+
+    function _renderTrackRecordChart(data) {
+      if (typeof Chart === 'undefined') return false;
+      const canvas = document.getElementById('trackRecordChart');
+      if (!canvas) return false;
+      const ctx = canvas.getContext('2d');
+
+      const oracleSeries = (data.oracle && data.oracle.series) || [];
+      const benchSeries  = (data.benchmarks && data.benchmarks[0] && data.benchmarks[0].series) || [];
+
+      const allDates = Array.from(new Set([
+        ...oracleSeries.map(p => p.date),
+        ...benchSeries.map(p => p.date),
+      ])).sort();
+
+      const buildAligned = (series) => {
+        const map = new Map(series.map(p => [p.date, p.value]));
+        let last = null;
+        return allDates.map(d => {
+          if (map.has(d)) last = map.get(d);
+          return last;
+        });
+      };
+
+      const datasets = [{
+        label: (data.oracle && data.oracle.label) || 'AILo Oracle',
+        data:  buildAligned(oracleSeries),
+        borderColor:     (data.oracle && data.oracle.color) || '#F97316',
+        backgroundColor: 'rgba(249,115,22,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.15,
+        fill: false,
+      }];
+      if (data.benchmarks && data.benchmarks[0] && benchSeries.length > 0) {
+        datasets.push({
+          label: data.benchmarks[0].label || 'VT',
+          data:  buildAligned(benchSeries),
+          borderColor:     data.benchmarks[0].color || '#60A5FA',
+          backgroundColor: 'transparent',
+          borderWidth: 1.6,
+          borderDash:  [4, 4],
+          pointRadius: 0,
+          tension: 0.15,
+          fill: false,
+        });
+      }
+
+      if (_trackRecordChart) {
+        try { _trackRecordChart.destroy(); } catch (_) {}
+        _trackRecordChart = null;
+      }
+
+      _trackRecordChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: allDates, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#FAFAFA',
+                font: { family: 'Outfit, sans-serif', size: 12 },
+                boxWidth: 18,
+                padding: 16,
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: $${Number(ctx.parsed.y).toFixed(2)}`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              ticks: { color: '#A1A1AA', maxTicksLimit: 8, font: { family: 'Outfit, sans-serif', size: 11 } },
+              grid:  { color: 'rgba(255,255,255,0.04)' },
+            },
+            y: {
+              ticks: {
+                color: '#A1A1AA',
+                font: { family: 'Outfit, sans-serif', size: 11 },
+                callback: (v) => '$' + v,
+              },
+              grid: { color: 'rgba(255,255,255,0.04)' },
+            },
+          },
+        },
+      });
+      return true;
+    }
+
+    function loadTrackRecord() {
+      if (typeof fetch !== 'function') { _hideTrackRecord(); return; }
+      fetch(TRACK_RECORD_URL, { method: 'GET', cache: 'no-cache' })
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          if (!data || data.status !== 'ok') { _hideTrackRecord(); return; }
+          _trackRecordData = data;
+          const stats = document.getElementById('trackRecordStats');
+          if (stats) stats.removeAttribute('aria-hidden');
+          // Aguarda Chart.js (defer) — pode não estar pronto se o load disparou cedo.
+          const tryRender = (tries) => {
+            if (typeof Chart !== 'undefined') {
+              if (_renderTrackRecordChart(data)) {
+                _renderTrackRecordI18n();
+                return;
+              }
+            }
+            if (tries <= 0) { _hideTrackRecord(); return; }
+            setTimeout(() => tryRender(tries - 1), 200);
+          };
+          tryRender(15);
+        })
+        .catch(err => {
+          if (typeof console !== 'undefined' && console.warn) console.warn('Track record failed:', err);
+          _hideTrackRecord();
+        });
+    }
+
     /* ── Init ─────────────────────────────────────────────────────── */
     applyLang(detectLang());
+    if (document.readyState === 'complete') {
+      loadTrackRecord();
+    } else {
+      window.addEventListener('load', loadTrackRecord);
+    }
   })();
   </script>
 </body>
