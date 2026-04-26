@@ -1295,17 +1295,17 @@
     .price-lock { font-size: 12px; color: rgba(52,211,153,0.85); margin: 2px 0 18px; }
     .price-lock::before { content: '🔒 '; }
 
-    /* ── Pricing 3-tier grid ──────────────────────────────────────── */
+    /* ── Pricing 2-tier grid (VIP foi movido para caixa separada) ── */
     .pricing-tiers {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      margin: 56px auto 0;
-      max-width: 1080px;
+      margin: 32px auto 0;
+      max-width: 760px;
       align-items: stretch;
     }
 
-    @media (max-width: 960px) { .pricing-tiers { grid-template-columns: 1fr; max-width: 520px; } }
+    @media (max-width: 720px) { .pricing-tiers { grid-template-columns: 1fr; max-width: 460px; } }
 
     .tier-card {
       position: relative;
@@ -1437,6 +1437,125 @@
       text-align: center;
       margin-top: 10px;
       line-height: 1.5;
+    }
+
+    /* ── AUM context block (above pricing grid) ──────────────────── */
+    .aum-comparison {
+      max-width: 720px;
+      margin: 32px auto 0;
+      padding: 22px 26px;
+      background: rgba(249,115,22,0.04);
+      border: 1px dashed var(--border-orange);
+      border-radius: var(--radius);
+    }
+    .aum-comparison-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 8px;
+    }
+    .aum-comparison-body {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── VIP note (separate from grade comercial) ───────────────── */
+    .vip-note {
+      max-width: 720px;
+      margin: 36px auto 0;
+      padding: 22px 26px;
+      background: rgba(201,168,76,0.04);
+      border: 1px dashed rgba(201,168,76,0.35);
+      border-radius: var(--radius);
+    }
+    .vip-note-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 8px;
+    }
+    .vip-note-body {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Coming-soon hint abaixo do pricing ─────────────────────── */
+    .coming-soon-hint {
+      max-width: 620px;
+      margin: 18px auto 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
+
+    /* ── Comparison table (vs alternativas) ─────────────────────── */
+    .compare-wrap {
+      max-width: 1080px;
+      margin: 48px auto 0;
+    }
+    .compare-table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .compare-table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare-table th,
+    .compare-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .compare-table thead th {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-orange);
+      background: rgba(255,255,255,0.015);
+    }
+    .compare-table thead th.col-ailo { color: var(--orange-light); }
+    .compare-table tbody tr:hover { background: rgba(255,255,255,0.015); }
+    .compare-table .col-feature {
+      font-weight: 600;
+      color: var(--text);
+      width: 32%;
+    }
+    .compare-table .col-ailo {
+      background: rgba(249,115,22,0.05);
+      color: var(--text);
+      font-weight: 600;
+      border-left: 1px solid var(--border-orange);
+      border-right: 1px solid var(--border-orange);
+    }
+    .compare-table .cell-positive { color: var(--green); }
+    .compare-table .cell-warn { color: var(--orange-light); }
+    .compare-disclaimer {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--text-faint);
+      text-align: center;
+      line-height: 1.6;
+    }
+    @media (max-width: 720px) {
+      .compare-table { min-width: 640px; font-size: 13px; }
+      .compare-table th, .compare-table td { padding: 12px 12px; }
     }
 
     /* ── FAQ section ──────────────────────────────────────────────── */
@@ -1823,6 +1942,93 @@
     </div>
   </section>
 
+  <!-- ── COMPARAÇÃO vs ALTERNATIVAS ───────────────────────────────── -->
+  <section id="comparacao" class="compare-section" style="background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-label">
+        <span class="badge" data-i18n="comparison.badge"></span>
+      </div>
+      <h2 class="section-title" data-i18n-html="comparison.title"></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle" data-i18n="comparison.subtitle"></p>
+
+      <div class="compare-wrap fade-up">
+        <div class="compare-table-scroll">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th class="col-feature" data-i18n="comparison.col.feature"></th>
+                <th class="col-ailo"    data-i18n="comparison.col.ailo"></th>
+                <th data-i18n="comparison.col.robo"></th>
+                <th data-i18n="comparison.col.tracker"></th>
+                <th data-i18n="comparison.col.signal"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.custody"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.no"></td>
+                <td class="cell-warn"               data-i18n="comparison.value.yes"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.aum"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.no"></td>
+                <td class="cell-warn"               data-i18n="comparison.value.aum_charge"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.multibroker"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.yes"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.partial"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.multicurrency"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.yes"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.partial"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.public_strategy"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.oracle"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.none"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.honest_benchmark"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.vt"></td>
+                <td                                  data-i18n="comparison.value.rare"></td>
+                <td                                  data-i18n="comparison.value.none"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.recommends_assets"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.no"></td>
+                <td                                  data-i18n="comparison.value.indirect"></td>
+                <td                                  data-i18n="comparison.value.no"></td>
+                <td class="cell-warn"               data-i18n="comparison.value.yes"></td>
+              </tr>
+              <tr>
+                <td class="col-feature"             data-i18n="comparison.row.conflict"></td>
+                <td class="col-ailo cell-positive"  data-i18n="comparison.value.none"></td>
+                <td class="cell-warn"               data-i18n="comparison.value.aum_charge"></td>
+                <td                                  data-i18n="comparison.value.none"></td>
+                <td class="cell-warn"               data-i18n="comparison.value.frequent"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="compare-disclaimer" data-i18n="comparison.disclaimer"></p>
+      </div>
+    </div>
+  </section>
+
   <!-- ── COMO FUNCIONA ────────────────────────────────────────────── -->
   <section id="como-funciona">
     <div class="container">
@@ -2114,10 +2320,16 @@
       <div class="section-divider"></div>
       <p class="section-subtitle" data-i18n="pricing.sub"></p>
 
-      <div class="pricing-tiers">
+      <!-- AUM context block — só faz sentido no modo comercial -->
+      <div class="aum-comparison commerce-only fade-up">
+        <div class="aum-comparison-title" data-i18n="pricing.aum_comparison.title"></div>
+        <p class="aum-comparison-body" data-i18n="pricing.aum_comparison.body"></p>
+      </div>
+
+      <div class="pricing-tiers commerce-only">
 
         <!-- Tier 1 · Early Adopter (destaque) -->
-        <div class="tier-card is-featured fade-up commerce-only">
+        <div class="tier-card is-featured fade-up">
           <span class="tier-ribbon" data-i18n="pricing.tier_ea.ribbon"></span>
           <div class="tier-name" data-i18n="pricing.tier_ea.name"></div>
           <div class="tier-sub" data-i18n="pricing.tier_ea.sub"></div>
@@ -2146,7 +2358,7 @@
         </div>
 
         <!-- Tier 2 · Regular ($39) -->
-        <div class="tier-card fade-up fade-up-delay-1 commerce-only">
+        <div class="tier-card fade-up fade-up-delay-1">
           <div class="tier-name" data-i18n="pricing.tier_reg.name"></div>
           <div class="tier-sub" data-i18n="pricing.tier_reg.sub"></div>
           <div class="tier-price">
@@ -2165,34 +2377,21 @@
             <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_reg.f5"></span></li>
             <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_reg.f6"></span></li>
           </ul>
-          <!-- Stripe integration: href do Checkout Session do plano Regular ($30/mês). -->
+          <!-- Stripe integration: href do Checkout Session do plano Regular ($39/mês). -->
           <a href="#assinar-regular" class="btn-secondary tier-cta" data-stripe-plan="regular" data-i18n="pricing.tier_reg.cta"></a>
           <p class="tier-note" data-i18n="pricing.tier_reg.note"></p>
-        </div>
-
-        <!-- Tier 3 · VIP / Beta Testers -->
-        <div class="tier-card fade-up fade-up-delay-2">
-          <div class="tier-name" style="color:var(--gold2);" data-i18n="pricing.tier_vip.name"></div>
-          <div class="tier-sub" data-i18n="pricing.tier_vip.sub"></div>
-          <div class="tier-price">
-            <span class="price-amount" style="color:var(--gold2);" data-i18n="pricing.tier_vip.price_label"></span>
-          </div>
-          <div class="tier-price-regular">&nbsp;</div>
-          <div class="tier-lock">&nbsp;</div>
-          <div class="tier-counter" style="background:transparent;border-color:var(--border);color:var(--text-faint);" data-i18n="pricing.tier_vip.counter"></div>
-          <ul class="tier-features">
-            <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_vip.f1"></span></li>
-            <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_vip.f2"></span></li>
-            <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_vip.f3"></span></li>
-            <li><span class="check-icon">✓</span><span data-i18n="pricing.tier_vip.f4"></span></li>
-          </ul>
-          <a href="#" class="btn-secondary tier-cta" data-open-modal data-i18n="pricing.tier_vip.cta"></a>
-          <p class="tier-note" data-i18n="pricing.tier_vip.note"></p>
         </div>
 
       </div>
 
       <p class="pricing-note commerce-only" style="text-align:center;margin-top:32px;max-width:620px;margin-inline:auto;" data-i18n-html="pricing.footnote"></p>
+      <p class="coming-soon-hint commerce-only" data-i18n="pricing.coming_soon"></p>
+
+      <!-- VIP — programa fechado, fora da grade comercial -->
+      <div class="vip-note fade-up">
+        <div class="vip-note-title" data-i18n="pricing.vip_note.title"></div>
+        <p class="vip-note-body" data-i18n="pricing.vip_note.body"></p>
+      </div>
     </div>
   </section>
 
@@ -2557,6 +2756,40 @@
         'pricing.tier_vip.cta':         'Solicitar convite',
         'pricing.tier_vip.note':        'Vamos avaliar o seu perfil e responder em até 48h',
         'pricing.footnote':             'Todos os planos em USD, cobrados em <strong>USDC na rede Polygon</strong>. <span style="color:var(--orange-light);">⚠ Apenas rede Polygon</span> — pagamentos enviados por outras redes (Ethereum, BSC, etc.) não são reconhecidos automaticamente. Sem taxa de cancelamento.',
+        /* — Pricing extras (Sprint 2: AUM context · VIP note · coming soon) — */
+        'pricing.aum_comparison.title': 'Quanto isto custa em relação à sua carteira',
+        'pricing.aum_comparison.body':  'A AILo cobra fixo: $39/mês ($468/ano), independente do tamanho da sua carteira. Robo-advisor cobra 0.6%-1% ao ano sobre o total — numa carteira de $100k são $600-1.000/ano; em $500k, $3.000-5.000. Quanto maior sua carteira, mais a AILo te poupa.',
+        'pricing.vip_note.title':       'Programa VIP — fechado, por convite',
+        'pricing.vip_note.body':        'VIP não é um plano à venda. É o nosso programa fechado para os primeiros 20 amigos e beta testers, sem custo, com acesso direto a mim. Vagas limitadas — se você foi convidado, já recebeu o link.',
+        'pricing.coming_soon':          'Em breve: Pix BRL como método de pagamento e tier Premium ($79/mês) com análise mensal personalizada.',
+        /* — Comparison vs alternatives (Sprint 2) — */
+        'comparison.badge':                 'Comparação',
+        'comparison.title':                 '<span class="highlight">AILo</span> comparada às alternativas',
+        'comparison.subtitle':              'Honestamente. Sem desqualificar ninguém. Cada categoria existe por uma razão — a AILo escolheu não ser nenhuma delas.',
+        'comparison.col.feature':           'Característica',
+        'comparison.col.ailo':              'AILo',
+        'comparison.col.robo':              'Robo-advisor',
+        'comparison.col.tracker':           'Tracker (Sharesight, Kinvo)',
+        'comparison.col.signal':            'Signal group / newsletter',
+        'comparison.row.custody':           'Toma posse do seu dinheiro',
+        'comparison.row.aum':               'Cobra % do patrimônio',
+        'comparison.row.multibroker':       'Consolida múltiplas corretoras',
+        'comparison.row.multicurrency':     'Mostra retorno em qualquer moeda',
+        'comparison.row.public_strategy':   'Estratégia pública e auditável',
+        'comparison.row.honest_benchmark':  'Benchmark vs mercado, sempre visível',
+        'comparison.row.recommends_assets': 'Recomenda ativos específicos',
+        'comparison.row.conflict':          'Conflito de interesse',
+        'comparison.value.yes':             'Sim',
+        'comparison.value.no':              'Não',
+        'comparison.value.partial':         'Parcial',
+        'comparison.value.frequent':        'Frequente',
+        'comparison.value.rare':            'Raro',
+        'comparison.value.none':            'Nenhum',
+        'comparison.value.indirect':        'Indireto',
+        'comparison.value.aum_charge':      'Sim (0.5-1% AUM)',
+        'comparison.value.oracle':          'Sim (Oracle pública)',
+        'comparison.value.vt':              'Sim (VT)',
+        'comparison.disclaimer':            'Comparação geral baseada em ofertas típicas de cada categoria. Concorrentes específicos podem variar. Atualizado em 2026-04-26.',
         /* faq */
         'faq.badge': 'Perguntas frequentes',
         'faq.title': 'Dúvidas comuns.',
@@ -2785,6 +3018,40 @@
         'pricing.tier_vip.cta':         'Solicitar invitación',
         'pricing.tier_vip.note':        'Evaluamos tu perfil y respondemos en hasta 48h',
         'pricing.footnote':             'Todos los planes en USD, cobrados en <strong>USDC en la red Polygon</strong>. <span style="color:var(--orange-light);">⚠ Solo red Polygon</span> — pagos enviados por otras redes (Ethereum, BSC, etc.) no se reconocen automáticamente. Sin cargo por cancelación.',
+        /* — Pricing extras (Sprint 2) — */
+        'pricing.aum_comparison.title': 'Cuánto cuesta esto en relación a tu cartera',
+        'pricing.aum_comparison.body':  'AILo cobra fijo: $39/mes ($468/año), sin importar el tamaño de tu cartera. Los robo-advisors cobran 0.6%-1% AUM anual — en una cartera de $100k son $600-1.000/año; en $500k, $3.000-5.000. Mientras más grande tu cartera, más te ahorra AILo.',
+        'pricing.vip_note.title':       'Programa VIP — cerrado, solo por invitación',
+        'pricing.vip_note.body':        'VIP no es un plan a la venta. Es nuestro programa cerrado para los primeros 20 amigos y beta testers, sin costo, con acceso directo a mí. Cupos limitados — si fuiste invitado, ya recibiste el enlace.',
+        'pricing.coming_soon':          'Próximamente: Pix BRL como método de pago y tier Premium ($79/mes) con análisis mensual personalizado.',
+        /* — Comparison vs alternatives (Sprint 2) — */
+        'comparison.badge':                 'Comparación',
+        'comparison.title':                 'Cómo se compara <span class="highlight">AILo</span>',
+        'comparison.subtitle':              'Honestamente. Sin descalificar a nadie. Cada categoría existe por una razón — AILo eligió no ser ninguna de ellas.',
+        'comparison.col.feature':           'Característica',
+        'comparison.col.ailo':              'AILo',
+        'comparison.col.robo':              'Robo-advisor',
+        'comparison.col.tracker':           'Tracker (Sharesight, Kinvo)',
+        'comparison.col.signal':            'Signal group / newsletter',
+        'comparison.row.custody':           'Toma custodia de tu dinero',
+        'comparison.row.aum':               'Cobra % del patrimonio',
+        'comparison.row.multibroker':       'Consolida múltiples corredores',
+        'comparison.row.multicurrency':     'Muestra retornos en cualquier moneda',
+        'comparison.row.public_strategy':   'Estrategia pública y auditable',
+        'comparison.row.honest_benchmark':  'Benchmark vs mercado, siempre visible',
+        'comparison.row.recommends_assets': 'Recomienda activos específicos',
+        'comparison.row.conflict':          'Conflicto de intereses',
+        'comparison.value.yes':             'Sí',
+        'comparison.value.no':              'No',
+        'comparison.value.partial':         'Parcial',
+        'comparison.value.frequent':        'Frecuente',
+        'comparison.value.rare':            'Raro',
+        'comparison.value.none':            'Ninguno',
+        'comparison.value.indirect':        'Indirecto',
+        'comparison.value.aum_charge':      'Sí (0.5-1% AUM)',
+        'comparison.value.oracle':          'Sí (Oracle pública)',
+        'comparison.value.vt':              'Sí (VT)',
+        'comparison.disclaimer':            'Comparación general basada en ofertas típicas de cada categoría. Competidores específicos pueden variar. Actualizado el 2026-04-26.',
         /* faq */
         'faq.badge': 'Preguntas frecuentes',
         'faq.title': 'Dudas comunes.',
@@ -3011,6 +3278,40 @@
         'pricing.tier_vip.cta':         'Request invite',
         'pricing.tier_vip.note':        'We\'ll review your profile and reply within 48h',
         'pricing.footnote':             'All plans in USD, charged in <strong>USDC on the Polygon network</strong>. <span style="color:var(--orange-light);">⚠ Polygon network only</span> — payments sent over other networks (Ethereum, BSC, etc.) are not auto-detected. No cancellation fee.',
+        /* — Pricing extras (Sprint 2) — */
+        'pricing.aum_comparison.title': 'What this costs relative to your portfolio',
+        'pricing.aum_comparison.body':  'AILo charges flat: $39/mo ($468/yr), regardless of portfolio size. Robo-advisors charge 0.6%-1% AUM annually — on a $100k portfolio, that\'s $600-1,000/yr; on $500k, $3,000-5,000. The larger your portfolio, the more AILo saves you.',
+        'pricing.vip_note.title':       'VIP Program — closed, invite-only',
+        'pricing.vip_note.body':        'VIP isn\'t a paid plan. It\'s our closed program for the first 20 friends and beta testers, free, with direct access to me. Limited spots — if you were invited, you already got the link.',
+        'pricing.coming_soon':          'Coming soon: Pix BRL as a payment method and Premium tier ($79/mo) with personalized monthly analysis.',
+        /* — Comparison vs alternatives (Sprint 2) — */
+        'comparison.badge':                 'Comparison',
+        'comparison.title':                 'How <span class="highlight">AILo</span> compares',
+        'comparison.subtitle':              'Honestly. No trash talk. Each category exists for a reason — AILo chose to be none of them.',
+        'comparison.col.feature':           'Feature',
+        'comparison.col.ailo':              'AILo',
+        'comparison.col.robo':              'Robo-advisor',
+        'comparison.col.tracker':           'Tracker (Sharesight, Kinvo)',
+        'comparison.col.signal':            'Signal group / newsletter',
+        'comparison.row.custody':           'Holds your money',
+        'comparison.row.aum':               'Charges % of assets',
+        'comparison.row.multibroker':       'Consolidates multiple brokers',
+        'comparison.row.multicurrency':     'Shows returns in any currency',
+        'comparison.row.public_strategy':   'Public, auditable strategy',
+        'comparison.row.honest_benchmark':  'Always-visible market benchmark',
+        'comparison.row.recommends_assets': 'Recommends specific assets',
+        'comparison.row.conflict':          'Conflict of interest',
+        'comparison.value.yes':             'Yes',
+        'comparison.value.no':              'No',
+        'comparison.value.partial':         'Partial',
+        'comparison.value.frequent':        'Frequent',
+        'comparison.value.rare':            'Rare',
+        'comparison.value.none':            'None',
+        'comparison.value.indirect':        'Indirect',
+        'comparison.value.aum_charge':      'Yes (0.5-1% AUM)',
+        'comparison.value.oracle':          'Yes (Public Oracle)',
+        'comparison.value.vt':              'Yes (VT)',
+        'comparison.disclaimer':            'General comparison based on typical offerings in each category. Specific competitors may vary. Updated 2026-04-26.',
         /* faq */
         'faq.badge': 'Frequently asked',
         'faq.title': 'Common questions.',
