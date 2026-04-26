@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sentinel Invest — Análise de Portfólio com IA</title>
-  <meta name="description" content="Conheça o AILo: análise de portfólio com IA. Monitora sua carteira real, alerta quando algo importa e responde suas dúvidas no Telegram. Educação e análise — não recomendação." />
+  <meta name="description" content="Conheça o AILo: análise de portfólio com IA. Monitora sua carteira real, alerta quando algo importa no canal que preferir (Telegram ou e-mail) e responde dúvidas no Telegram. Educação e análise — não recomendação." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
@@ -653,12 +653,12 @@
     /* ── FOR WHOM ─────────────────────────────────────────────────── */
     .profile-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-top: 56px;
     }
 
-    @media (max-width: 640px) { .profile-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 960px) { .profile-grid { grid-template-columns: 1fr; } }
 
     .profile-card {
       background: var(--bg-card);
@@ -2304,24 +2304,16 @@
 
       <div class="profile-grid">
         <div class="profile-card fade-up">
-          <div class="profile-badge" data-i18n="profile1.label"></div>
-          <div class="profile-title" data-i18n="profile1.title"></div>
-          <div class="profile-desc"  data-i18n="profile1.desc"></div>
+          <div class="profile-title" data-i18n="for_who.persona1.title"></div>
+          <div class="profile-desc"  data-i18n="for_who.persona1.body"></div>
         </div>
         <div class="profile-card fade-up fade-up-delay-1">
-          <div class="profile-badge" data-i18n="profile2.label"></div>
-          <div class="profile-title" data-i18n="profile2.title"></div>
-          <div class="profile-desc"  data-i18n="profile2.desc"></div>
+          <div class="profile-title" data-i18n="for_who.persona2.title"></div>
+          <div class="profile-desc"  data-i18n="for_who.persona2.body"></div>
         </div>
         <div class="profile-card fade-up fade-up-delay-2">
-          <div class="profile-badge" data-i18n="profile3.label"></div>
-          <div class="profile-title" data-i18n="profile3.title"></div>
-          <div class="profile-desc"  data-i18n="profile3.desc"></div>
-        </div>
-        <div class="profile-card fade-up fade-up-delay-3">
-          <div class="profile-badge" data-i18n="profile4.label"></div>
-          <div class="profile-title" data-i18n="profile4.title"></div>
-          <div class="profile-desc"  data-i18n="profile4.desc"></div>
+          <div class="profile-title" data-i18n="for_who.persona3.title"></div>
+          <div class="profile-desc"  data-i18n="for_who.persona3.body"></div>
         </div>
       </div>
     </div>
@@ -2709,7 +2701,7 @@
       /* ════════════════════════════════════════════════════════════ */
       pt: {
         'meta.title':       'Sentinel Invest — Análise de Portfólio com IA',
-        'meta.description': 'Conheça o AILo: análise de portfólio com IA. Monitora sua carteira real, alerta quando algo importa e responde suas dúvidas no Telegram. Educação e análise — não recomendação.',
+        'meta.description': 'Conheça o AILo: análise de portfólio com IA. Monitora sua carteira real, alerta quando algo importa no canal que preferir (Telegram ou e-mail) e responde dúvidas no Telegram. Educação e análise — não recomendação.',
         'html.lang':        'pt-BR',
         /* nav */
         'nav.how':     'Como funciona',
@@ -2719,7 +2711,7 @@
         'nav.cta':     'Testar 14 dias grátis',
         'nav.client':  'Já sou cliente →',
         /* hero */
-        'hero.badge':        'Análise de portfólio · IA + Telegram',
+        'hero.badge':        'Análise de portfólio · IA + Telegram ou e-mail',
         'hero.title':        'A segunda opinião que falta na <span class="highlight">sua carteira.</span>',
         'hero.subtitle':     'Análise rules-based, transparente e multi-corretora. Sem corretagem. Sem produto pra empurrar. Você decide; a AILo te mostra o que ela veria.',
         'hero.cta_primary':  'Ver minha carteira na AILo →',
@@ -2736,7 +2728,7 @@
         /* diff */
         'diff.badge': 'O que é diferente',
         'diff.title': 'Não é app de analytics.<br/>É <span class="highlight">análise da sua carteira.</span>',
-        'diff.sub':   'Plataformas de investimento te mostram números. O AILo lê os números da sua carteira real e te explica o que importa — em português, no Telegram, quando importa.',
+        'diff.sub':   'Plataformas de investimento te mostram números. O AILo lê os números da sua carteira real e te explica o que importa — em português, no canal que você escolher (Telegram ou e-mail), quando importa.',
         'diff1.title':'Sua carteira inteira numa moeda só.',
         'diff1.desc': 'Brasil, EUA, Europa, cripto. BRL, USD, EUR, CLP. Ative o seletor e veja seu retorno real na moeda que faz sentido pra você — agora.',
         'diff2.title':'Rules-based. Sem caixa-preta.',
@@ -2751,8 +2743,8 @@
         'step1.desc': 'Responde um onboarding simples: ativos que tem, quantidades, preço médio, objetivos. ETFs, ações BR/EUA, fundos, cripto — tudo junto.',
         'step2.title':'AILo analisa seu portfólio',
         'step2.desc': 'O sistema processa sua carteira, calcula P&L em tempo real, identifica concentrações e alinha com os seus objetivos declarados.',
-        'step3.title':'Receba análise no Telegram',
-        'step3.desc': 'A partir daí, o AILo monitora seus ativos 24/7, envia alertas quando algo importa e responde suas dúvidas direto no Telegram — no seu tempo.',
+        'step3.title':'Receba análise no seu canal',
+        'step3.desc': 'A partir daí, o AILo monitora seus ativos 24/7, envia alertas quando algo importa no canal que você escolher (Telegram ou e-mail) e responde suas dúvidas direto no Telegram — no seu tempo.',
         /* does */
         'does.badge':  'O que o AILo faz',
         'does.title':  'Análise em cada<br/><span class="highlight">momento que importa.</span>',
@@ -2781,20 +2773,14 @@
         'oracle.f4.desc': 'Todos os dias às 07:30 o Oracle publica a sua análise: regime, ativo em foco e o que monitorizaria nas próximas 48h.',
         /* for whom */
         'for.badge': 'Para quem é',
-        'for.title': 'Feito para o investidor<br/><span class="highlight">brasileiro que começou.</span>',
-        'for.sub':   'Pensado para quem já investe (ou quer investir), mas sente que falta alguém que explique o que está a acontecer na carteira.',
-        'profile1.label': 'Iniciante com carteira',
-        'profile1.title': 'Já começou a investir e tem dúvidas',
-        'profile1.desc':  'Aportou em ETFs, fundos ou ações BR. Quer entender o que se passa na carteira sem ter de ler relatórios de research. O AILo explica em português.',
-        'profile2.label': 'Intermediário em evolução',
-        'profile2.title': 'Carteira diversificada crescendo',
-        'profile2.desc':  'Já investe em vários ativos (B3, ETFs, talvez cripto). Quer um segundo olhar sobre a carteira e alertas quando sair da estratégia.',
-        'profile3.label': 'Poupador com metas',
-        'profile3.title': 'Investindo para objetivos de longo prazo',
-        'profile3.desc':  'Está a construir patrimônio para aposentadoria, imóvel ou liberdade financeira. Quer análise objetiva e evitar decisões no calor do momento.',
-        'profile4.label': 'Brasileiro no exterior',
-        'profile4.title': 'Investindo em BR, EUA e cripto ao mesmo tempo',
-        'profile4.desc':  'Tem ativos em corretora brasileira, corretora americana e cripto. Precisa de alguém que olhe o conjunto — não uma ferramenta por silo.',
+        'for.title': 'Para quem a AILo<br/><span class="highlight">faz sentido.</span>',
+        'for.sub':   'Não é pra todo mundo. Se você se reconhece em algum destes, provavelmente é.',
+        'for_who.persona1.title': 'Você tem múltiplas corretoras e o Sheets não bate.',
+        'for_who.persona1.body':  'Avenue + Inter + Binance? Schwab + Fintual + Buda? Degiro + IBKR + Coinbase? Você atualiza uma planilha em Google Sheets quando lembra, sabe que ela não bate, mas é o que tem. A AILo consolida tudo num só lugar — com retorno real em qualquer moeda.',
+        'for_who.persona2.title': 'Você passou do tamanho onde robo-advisor faz sentido.',
+        'for_who.persona2.body':  'Fintual ou NuInvest Inteligente cresceu com você até US$ 100k. Acima disso, é caixa-preta cobrando AUM crescente — e você sente que poderia decidir por conta própria se tivesse análise honesta. A AILo dá visão sem custódia. Você decide; nós mostramos.',
+        'for_who.persona3.title': 'Você vive entre moedas e corretoras de países diferentes.',
+        'for_who.persona3.body':  'Brasileiro em Lisboa, Berlim, Miami? Tem Inter no Brasil, Degiro ou IBKR onde mora, talvez RSUs em USD vestendo? A AILo consolida as corretoras de qualquer país numa moeda só — BRL, USD, EUR, CLP — com FX honesto. Cobertura fiscal multi-jurisdição está no roadmap; consolidação real já existe hoje.',
         /* not */
         'not.badge': 'O que não somos',
         'not.title': 'Transparência<br/><span class="highlight">total.</span>',
@@ -2808,13 +2794,13 @@
         /* testimonials */
         'testimonials.badge': 'Resultados reais',
         'testimonials.title': 'O que muda quando você tem<br/><span class="highlight">análise de verdade.</span>',
-        't1.text': 'Pela primeira vez tenho alguém que olha a minha carteira inteira — B3, ETFs e cripto juntos. Os alertas no Telegram fizeram diferença real nos rebalanceamentos.',
+        't1.text': 'Pela primeira vez tenho alguém que olha a minha carteira inteira — B3, ETFs e cripto juntos. Os alertas que recebo fizeram diferença real nos rebalanceamentos.',
         't1.name': 'Mariana R.',
         't1.role': 'Investidora intermediária · São Paulo',
         't2.text': 'Recebi análise da minha posição em IVVB11 antes de tomar decisão. O AILo explicou concentração, cenário e riscos — em português claro. Ajudou a decidir com calma.',
         't2.name': 'Diego S.',
         't2.role': 'Beta tester · Rio de Janeiro',
-        't3.text': 'Trabalho o dia inteiro e não tenho tempo de ler gráfico. Agora recebo alerta no Telegram só quando algo importa na minha carteira. Mudou como eu invisto.',
+        't3.text': 'Trabalho o dia inteiro e não tenho tempo de ler gráfico. Agora recebo alerta só quando algo importa na minha carteira. Mudou como eu invisto.',
         't3.name': 'Carlos M.',
         't3.role': 'Profissional ocupado · Belo Horizonte',
         /* pricing */
@@ -2831,7 +2817,7 @@
         'pricing.tier_ea.counter': 'Vagas ainda não abertas · em beta fechado',
         'pricing.tier_ea.f1':      'Análise completa da sua carteira',
         'pricing.tier_ea.f2':      'Monitoramento 24/7 dos seus ativos',
-        'pricing.tier_ea.f3':      'Alertas contextualizados no Telegram',
+        'pricing.tier_ea.f3':      'Alertas contextualizados no canal que você escolher',
         'pricing.tier_ea.f4':      'Dashboard web (P&L, dividendos, histórico)',
         'pricing.tier_ea.f5':      'Dúvidas sob demanda no Telegram',
         'pricing.tier_ea.f6':      'Cancele a qualquer momento',
@@ -2843,7 +2829,7 @@
         'pricing.tier_reg.counter': 'Disponível após as 50 vagas Early Adopter',
         'pricing.tier_reg.f1':      'Análise completa da sua carteira',
         'pricing.tier_reg.f2':      'Monitoramento 24/7 dos seus ativos',
-        'pricing.tier_reg.f3':      'Alertas contextualizados no Telegram',
+        'pricing.tier_reg.f3':      'Alertas contextualizados no canal que você escolher',
         'pricing.tier_reg.f4':      'Dashboard web (P&L, dividendos, histórico)',
         'pricing.tier_reg.f5':      'Dúvidas sob demanda no Telegram',
         'pricing.tier_reg.f6':      'Cancele a qualquer momento',
@@ -2992,7 +2978,7 @@
       /* ════════════════════════════════════════════════════════════ */
       es: {
         'meta.title':       'Sentinel Invest — Análisis de Portafolio con IA',
-        'meta.description': 'Conoce al AILo: análisis de portafolio con IA. Monitorea tu cartera real, te alerta cuando algo importa y responde tus dudas en Telegram. Educación y análisis — no recomendación.',
+        'meta.description': 'Conoce al AILo: análisis de portafolio con IA. Monitorea tu cartera real, te alerta cuando algo importa en el canal que prefieras (Telegram o e-mail) y responde tus dudas en Telegram. Educación y análisis — no recomendación.',
         'html.lang':        'es',
         'nav.how':     'Cómo funciona',
         'nav.for_who': 'Para quién',
@@ -3000,7 +2986,7 @@
         'nav.videos':  'Videos',
         'nav.cta':     'Probar 14 días gratis',
         'nav.client':  'Ya soy cliente →',
-        'hero.badge':        'Análisis de portafolio · IA + Telegram',
+        'hero.badge':        'Análisis de portafolio · IA + Telegram o e-mail',
         'hero.title':        'La segunda opinión que le falta a <span class="highlight">tu cartera.</span>',
         'hero.subtitle':     'Análisis transparente basado en reglas, multi-corredor. Sin corretaje. Sin producto que empujarte. Tú decides; AILo te muestra lo que ella vería.',
         'hero.cta_primary':  'Ver mi cartera en AILo →',
@@ -3015,7 +3001,7 @@
         'tg.msg2':   'Analizando tu posición en QQQ con base en los aportes registrados y tus bandas objetivo...',
         'diff.badge': '¿Qué es diferente?',
         'diff.title': 'No es app de analytics.<br/>Es <span class="highlight">análisis de tu cartera.</span>',
-        'diff.sub':   'Las plataformas te muestran números. AILo lee los números de tu cartera real y te explica qué importa — en español, en Telegram, cuando importa.',
+        'diff.sub':   'Las plataformas te muestran números. AILo lee los números de tu cartera real y te explica qué importa — en español, en el canal que elijas (Telegram o e-mail), cuando importa.',
         'diff1.title':'Tu cartera completa en una sola moneda.',
         'diff1.desc': 'Brasil, EE.UU., Europa, cripto. BRL, USD, EUR, CLP. Activa el selector y mira tu retorno real en la moneda que tiene sentido para ti — al instante.',
         'diff2.title':'Basado en reglas. Sin caja negra.',
@@ -3029,8 +3015,8 @@
         'step1.desc': 'Respondes un onboarding simple: activos que tienes, cantidades, precio promedio, objetivos. ETFs, acciones locales, cripto, fondos — todo junto.',
         'step2.title':'AILo analiza tu portafolio',
         'step2.desc': 'El sistema procesa tu cartera, calcula P&L en tiempo real, identifica concentraciones y la alinea con tus objetivos declarados.',
-        'step3.title':'Recibe análisis en Telegram',
-        'step3.desc': 'Desde ahí, AILo monitorea tus activos 24/7, envía alertas cuando algo importa y responde tus dudas directo en Telegram — a tu ritmo.',
+        'step3.title':'Recibe análisis en tu canal',
+        'step3.desc': 'Desde ahí, AILo monitorea tus activos 24/7, envía alertas cuando algo importa en el canal que elijas (Telegram o e-mail) y responde tus dudas directo en Telegram — a tu ritmo.',
         'does.badge':  'Qué hace AILo',
         'does.title':  'Análisis en cada<br/><span class="highlight">momento que importa.</span>',
         'does.sub':    'Cinco formas en que AILo acompaña tu portafolio todos los días.',
@@ -3056,20 +3042,14 @@
         'oracle.f4.title':'Comentario diario del Oracle',
         'oracle.f4.desc': 'Todos los días a las 07:30 el Oracle publica su análisis: régimen, activo en foco y qué monitorearía en las próximas 48h.',
         'for.badge': '¿Para quién es?',
-        'for.title': 'Para el inversor que<br/><span class="highlight">ya empezó.</span>',
-        'for.sub':   'Pensado para quienes ya invierten (o están empezando) y sienten que falta alguien que explique qué pasa en la cartera.',
-        'profile1.label': 'Principiante con cartera',
-        'profile1.title': 'Ya empezaste a invertir y tienes dudas',
-        'profile1.desc':  'Aportaste en ETFs, fondos o acciones. Quieres entender qué pasa en la cartera sin leer reportes de research. AILo te lo explica claro.',
-        'profile2.label': 'Intermedio en evolución',
-        'profile2.title': 'Cartera diversificada creciendo',
-        'profile2.desc':  'Ya inviertes en varios activos (acciones, ETFs, cripto). Quieres una segunda mirada sobre la cartera y alertas cuando se sale de la estrategia.',
-        'profile3.label': 'Ahorrador con metas',
-        'profile3.title': 'Invirtiendo a largo plazo',
-        'profile3.desc':  'Estás construyendo patrimonio para jubilación, casa o libertad financiera. Quieres análisis objetivo y evitar decisiones calientes.',
-        'profile4.label': 'Inversor internacional',
-        'profile4.title': 'Invirtiendo en múltiples mercados',
-        'profile4.desc':  'Tienes activos en corredora local, broker internacional y cripto. Necesitas que alguien vea el conjunto — no una herramienta por silo.',
+        'for.title': 'Para quién tiene sentido<br/><span class="highlight">AILo.</span>',
+        'for.sub':   'No es para todos. Si te reconoces en alguno de estos, probablemente sí.',
+        'for_who.persona1.title': 'Tienes múltiples corredores y la planilla nunca cuadra.',
+        'for_who.persona1.body':  '¿Avenue + Inter + Binance? ¿Schwab + Fintual + Buda? ¿Degiro + IBKR + Coinbase? Actualizas una planilla cuando te acuerdas, sabes que no cuadra, pero es lo que hay. AILo consolida todo en un solo lugar — con retorno real en cualquier moneda.',
+        'for_who.persona2.title': 'Has superado el tamaño donde los robo-advisors tienen sentido.',
+        'for_who.persona2.body':  'Fintual o NuInvest Inteligente creció contigo hasta US$ 100k. Por encima de eso, es una caja negra cobrando AUM creciente — y sientes que podrías decidir por tu cuenta si tuvieras análisis honesto. AILo te da visibilidad sin custodia. Tú decides; nosotros mostramos.',
+        'for_who.persona3.title': 'Vives entre monedas y corredores de diferentes países.',
+        'for_who.persona3.body':  '¿Brasileño en Lisboa, Berlín, Miami? ¿Inter en Brasil, Degiro o IBKR donde vives, quizás RSUs vesting en USD? AILo consolida los corredores de cualquier país en una sola moneda — BRL, USD, EUR, CLP — con FX honesto. La cobertura fiscal multi-jurisdicción está en el roadmap; la consolidación real ya existe hoy.',
         'not.badge': 'Lo que no somos',
         'not.title': 'Transparencia<br/><span class="highlight">total.</span>',
         'not.sub':   'Tres cosas que Sentinel Invest definitivamente no es.',
@@ -3081,7 +3061,7 @@
         'not3.desc': 'No prometemos rentabilidad, no garantizamos ganancias y no damos "tips calientes". Invertir en renta variable tiene riesgos y puede generar pérdidas.',
         'testimonials.badge': 'Resultados reales',
         'testimonials.title': 'Lo que cambia cuando tienes<br/><span class="highlight">análisis de verdad.</span>',
-        't1.text': 'Por primera vez alguien mira mi cartera entera — acciones, ETFs y cripto al mismo tiempo. Las alertas en Telegram hicieron diferencia real en los rebalanceos.',
+        't1.text': 'Por primera vez alguien mira mi cartera entera — acciones, ETFs y cripto al mismo tiempo. Las alertas que recibo hicieron diferencia real en los rebalanceos.',
         't1.name': 'Mariana R.',
         't1.role': 'Inversora intermedia · Santiago',
         't2.text': 'Recibí análisis de mi posición en QQQ antes de decidir. AILo me explicó concentración, escenario y riesgos — en español claro. Me ayudó a decidir con calma.',
@@ -3104,7 +3084,7 @@
         'pricing.tier_ea.counter': 'Cupos aún no abiertos · en beta cerrada',
         'pricing.tier_ea.f1':      'Análisis completo de tu cartera',
         'pricing.tier_ea.f2':      'Monitoreo 24/7 de tus activos',
-        'pricing.tier_ea.f3':      'Alertas contextualizadas en Telegram',
+        'pricing.tier_ea.f3':      'Alertas contextualizadas en el canal que elijas',
         'pricing.tier_ea.f4':      'Dashboard web (P&L, dividendos, historial)',
         'pricing.tier_ea.f5':      'Dudas a demanda en Telegram',
         'pricing.tier_ea.f6':      'Cancela cuando quieras',
@@ -3116,7 +3096,7 @@
         'pricing.tier_reg.counter': 'Disponible al llenarse los 50 cupos Early Adopter',
         'pricing.tier_reg.f1':      'Análisis completo de tu cartera',
         'pricing.tier_reg.f2':      'Monitoreo 24/7 de tus activos',
-        'pricing.tier_reg.f3':      'Alertas contextualizadas en Telegram',
+        'pricing.tier_reg.f3':      'Alertas contextualizadas en el canal que elijas',
         'pricing.tier_reg.f4':      'Dashboard web (P&L, dividendos, historial)',
         'pricing.tier_reg.f5':      'Dudas a demanda en Telegram',
         'pricing.tier_reg.f6':      'Cancela cuando quieras',
@@ -3263,7 +3243,7 @@
       /* ════════════════════════════════════════════════════════════ */
       en: {
         'meta.title':       'Sentinel Invest — AI Portfolio Analysis',
-        'meta.description': 'Meet AILo — AI-powered portfolio analysis. It watches your real portfolio 24/7, alerts you when something matters, and answers your questions on Telegram. Education and analysis — not recommendation.',
+        'meta.description': 'Meet AILo — AI-powered portfolio analysis. It watches your real portfolio 24/7, alerts you when something matters on the channel you prefer (Telegram or email), and answers your questions on Telegram. Education and analysis — not recommendation.',
         'html.lang':        'en',
         'nav.how':     'How it works',
         'nav.for_who': 'Who it\'s for',
@@ -3271,7 +3251,7 @@
         'nav.videos':  'Videos',
         'nav.cta':     'Try 14 days free',
         'nav.client':  'Already a client →',
-        'hero.badge':        'Portfolio analysis · AI + Telegram',
+        'hero.badge':        'Portfolio analysis · AI + Telegram or email',
         'hero.title':        'The second opinion your <span class="highlight">portfolio is missing.</span>',
         'hero.subtitle':     'Rules-based, transparent, multi-broker analysis. No brokerage. No product to push. You decide; AILo shows you what it would see.',
         'hero.cta_primary':  'See my portfolio in AILo →',
@@ -3286,7 +3266,7 @@
         'tg.msg2':   'Analyzing your QQQ position based on logged contributions and your target bands...',
         'diff.badge': 'What\'s different',
         'diff.title': 'Not an analytics app.<br/>It\'s <span class="highlight">your portfolio\'s analysis.</span>',
-        'diff.sub':   'Investment platforms show you numbers. AILo reads the numbers of your real portfolio and explains what matters — in plain language, on Telegram, when it matters.',
+        'diff.sub':   'Investment platforms show you numbers. AILo reads the numbers of your real portfolio and explains what matters — in plain language, on the channel you choose (Telegram or email), when it matters.',
         'diff1.title':'Your entire portfolio in one currency.',
         'diff1.desc': 'Brazil, US, Europe, crypto. BRL, USD, EUR, CLP. Toggle the currency and see your real return in the unit that matters to you — instantly.',
         'diff2.title':'Rules-based. No black box.',
@@ -3300,8 +3280,8 @@
         'step1.desc': 'Answer a simple onboarding: assets you hold, quantities, average cost, goals. ETFs, stocks, funds, crypto — all in one place.',
         'step2.title':'AILo analyzes your portfolio',
         'step2.desc': 'The system processes your portfolio, calculates real-time P&L, detects concentrations and aligns it with your stated goals.',
-        'step3.title':'Get analysis on Telegram',
-        'step3.desc': 'From there, AILo monitors your assets 24/7, sends alerts when something matters and answers your questions directly on Telegram — on your time.',
+        'step3.title':'Get analysis on your channel',
+        'step3.desc': 'From there, AILo monitors your assets 24/7, sends alerts when something matters on the channel you choose (Telegram or email), and answers your questions directly on Telegram — on your time.',
         'does.badge':  'What AILo does',
         'does.title':  'Analysis at every<br/><span class="highlight">moment that matters.</span>',
         'does.sub':    'Five ways AILo watches your portfolio every day.',
@@ -3327,20 +3307,14 @@
         'oracle.f4.title':'Daily Oracle commentary',
         'oracle.f4.desc': 'Every day at 07:30 Oracle publishes its analysis: regime, asset in focus, and what it would monitor in the next 48h.',
         'for.badge': 'Who it\'s for',
-        'for.title': 'For investors who<br/><span class="highlight">already started.</span>',
-        'for.sub':   'Built for those who are investing (or just beginning) and feel they\'re missing someone to explain what\'s happening in their portfolio.',
-        'profile1.label': 'Beginner with a portfolio',
-        'profile1.title': 'You\'ve started investing — and you have questions',
-        'profile1.desc':  'You\'ve bought ETFs, funds or stocks. You want to understand your portfolio without reading research reports. AILo explains it in plain language.',
-        'profile2.label': 'Intermediate evolving',
-        'profile2.title': 'Diversified portfolio growing',
-        'profile2.desc':  'You already invest across several assets (stocks, ETFs, maybe crypto). You want a second pair of eyes on the portfolio and alerts when it drifts from strategy.',
-        'profile3.label': 'Saver with goals',
-        'profile3.title': 'Investing for long-term goals',
-        'profile3.desc':  'You\'re building wealth for retirement, a house or financial freedom. You want objective analysis and to avoid heat-of-the-moment decisions.',
-        'profile4.label': 'International investor',
-        'profile4.title': 'Investing across markets and currencies',
-        'profile4.desc':  'You hold assets in a local broker, an international broker and crypto. You need someone to see the full picture — not one tool per silo.',
+        'for.title': 'Who AILo<br/><span class="highlight">is for.</span>',
+        'for.sub':   'It\'s not for everyone. If you recognize yourself in any of these, it probably is.',
+        'for_who.persona1.title': 'You have multiple brokers and the spreadsheet never adds up.',
+        'for_who.persona1.body':  'Avenue + Inter + Binance? Schwab + Fintual + Buda? Degiro + IBKR + Coinbase? You update a Google Sheet when you remember, know it doesn\'t add up, but it\'s what you have. AILo consolidates everything in one place — with real returns in any currency.',
+        'for_who.persona2.title': 'You\'ve outgrown where robo-advisors make sense.',
+        'for_who.persona2.body':  'Fintual or NuInvest Inteligente grew with you up to $100k. Above that, it\'s a black box charging growing AUM — and you feel you could decide on your own if you had honest analysis. AILo gives you visibility without custody. You decide; we show.',
+        'for_who.persona3.title': 'You live between currencies and brokers in different countries.',
+        'for_who.persona3.body':  'Brazilian in Lisbon, Berlin, Miami? Inter in Brazil, Degiro or IBKR where you live, maybe RSUs vesting in USD? AILo consolidates brokers from any country into a single currency — BRL, USD, EUR, CLP — with honest FX. Multi-jurisdiction tax coverage is on the roadmap; real consolidation exists today.',
         'not.badge': 'What we\'re not',
         'not.title': 'Full<br/><span class="highlight">transparency.</span>',
         'not.sub':   'Three things Sentinel Invest definitively is not.',
@@ -3352,13 +3326,13 @@
         'not3.desc': 'No rate-of-return promises, no guaranteed gains, no "hot tips." Investing in variable income involves risk and can result in losses.',
         'testimonials.badge': 'Real results',
         'testimonials.title': 'What changes when you get<br/><span class="highlight">real analysis.</span>',
-        't1.text': 'For the first time someone looks at my whole portfolio — stocks, ETFs and crypto in one place. The Telegram alerts made a real difference to my rebalancing calls.',
+        't1.text': 'For the first time someone looks at my whole portfolio — stocks, ETFs and crypto in one place. The alerts I receive made a real difference to my rebalancing calls.',
         't1.name': 'Mariana R.',
         't1.role': 'Intermediate investor · Brazil',
         't2.text': 'I got analysis of my QQQ position before making a decision. AILo explained concentration, scenario and risks — in plain language. Helped me decide with a clear head.',
         't2.name': 'Diego S.',
         't2.role': 'Beta tester · Chile',
-        't3.text': 'I work all day and have no time to watch charts. Now I get a Telegram alert only when something matters for my portfolio. Changed how I invest.',
+        't3.text': 'I work all day and have no time to watch charts. Now I get an alert only when something matters for my portfolio. Changed how I invest.',
         't3.name': 'Carlos M.',
         't3.role': 'Busy professional · Mexico',
         /* pricing */
@@ -3375,7 +3349,7 @@
         'pricing.tier_ea.counter': 'Spots not open yet · in closed beta',
         'pricing.tier_ea.f1':      'Full portfolio analysis',
         'pricing.tier_ea.f2':      '24/7 monitoring of your assets',
-        'pricing.tier_ea.f3':      'Contextualized Telegram alerts',
+        'pricing.tier_ea.f3':      'Contextualized alerts on the channel you choose',
         'pricing.tier_ea.f4':      'Web dashboard (P&L, dividends, history)',
         'pricing.tier_ea.f5':      'On-demand Q&A on Telegram',
         'pricing.tier_ea.f6':      'Cancel anytime',
@@ -3387,7 +3361,7 @@
         'pricing.tier_reg.counter': 'Available once the 50 Early Adopter spots are filled',
         'pricing.tier_reg.f1':      'Full portfolio analysis',
         'pricing.tier_reg.f2':      '24/7 monitoring of your assets',
-        'pricing.tier_reg.f3':      'Contextualized Telegram alerts',
+        'pricing.tier_reg.f3':      'Contextualized alerts on the channel you choose',
         'pricing.tier_reg.f4':      'Web dashboard (P&L, dividends, history)',
         'pricing.tier_reg.f5':      'On-demand Q&A on Telegram',
         'pricing.tier_reg.f6':      'Cancel anytime',
