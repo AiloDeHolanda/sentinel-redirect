@@ -394,15 +394,18 @@
 
     .trust-icon { color: var(--orange); font-size: 14px; }
 
-    /* ── Telegram mockup ──────────────────────────────────────────── */
-    .tg-wrapper {
+    /* ── Multi-channel showcase (PR-42) — substitui mockup Telegram-only ─── */
+    .channel-showcase {
       margin-top: 72px;
-      max-width: 560px;
+      max-width: 920px;
       margin-inline: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
       position: relative;
     }
 
-    .tg-wrapper::before {
+    .channel-showcase::before {
       content: '';
       position: absolute;
       inset: -40px;
@@ -410,114 +413,136 @@
       pointer-events: none;
     }
 
-    .tg-window {
+    .channel-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 40px 80px -16px rgba(0,0,0,0.7), 0 0 0 1px var(--border);
-      position: relative;
-    }
-
-    .tg-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      background: var(--bg-elevated);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tg-avatar {
-      width: 38px; height: 38px;
-      background: var(--orange);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      flex-shrink: 0;
-    }
-
-    .tg-bot-name {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .tg-bot-status {
-      font-size: 12px;
-      color: var(--green);
-      margin-top: 1px;
-    }
-
-    .tg-body {
-      padding: 20px 18px;
+      padding: 18px;
+      font-size: 13px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
     }
 
-    .tg-msg { display: flex; flex-direction: column; }
-    .tg-msg.bot  { align-items: flex-start; }
-    .tg-msg.user { align-items: flex-end; }
-
-    .tg-bubble {
-      max-width: 88%;
-      padding: 11px 14px;
-      border-radius: 14px;
-      font-size: 13.5px;
-      line-height: 1.55;
-    }
-
-    .tg-bubble.bot {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
+    .channel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
       color: var(--text-muted);
-    }
-
-    .tg-bubble.user {
-      background: var(--orange);
-      color: #fff;
-      border-bottom-right-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       font-weight: 500;
     }
 
-    .tg-label {
+    .channel-icon {
+      font-size: 14px;
+      color: var(--orange);
+    }
+
+    /* Telegram-specific: chat bubble look */
+    .channel-telegram .channel-body {
+      background: #1A2030;
+      border-radius: 12px 12px 12px 2px;
+      padding: 12px;
+    }
+    .telegram-bubble strong {
+      color: #4FA8E0;
+      display: block;
+      margin-bottom: 8px;
       font-size: 12px;
-      font-weight: 700;
-      color: var(--orange-light);
-      margin-bottom: 5px;
-      letter-spacing: 0.01em;
+    }
+    .telegram-bubble p {
+      color: #DDDDDD;
+      margin: 6px 0;
+      line-height: 1.4;
+      font-size: 12px;
     }
 
-    .tg-time {
-      font-size: 11px;
-      color: var(--text-faint);
-      margin-top: 4px;
-      padding-inline: 4px;
+    /* Email-specific: clean white card */
+    .channel-email .channel-body {
+      background: #FAFAFA;
+      color: #222;
+      border-radius: 4px;
+      padding: 12px;
+    }
+    .email-subject {
+      font-weight: 600;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #DDD;
+      margin-bottom: 8px;
+      color: #111;
+      font-size: 12px;
+    }
+    .email-body p {
+      margin: 6px 0;
+      line-height: 1.4;
+      color: #333;
+      font-size: 12px;
     }
 
-    .tg-typing {
+    /* Dashboard-specific: dark KPIs */
+    .channel-dashboard .channel-body {
       display: flex;
-      gap: 4px;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dashboard-kpi {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 4px 2px 0;
+      padding: 10px 12px;
+      background: var(--orange-subtle);
+      border-left: 2px solid var(--orange);
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .dashboard-kpi strong {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .dashboard-kpi strong.positive { color: var(--green); }
+    .dashboard-kpi strong.negative { color: #EF4444; }
+    .dashboard-alert {
+      padding: 10px 12px;
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 2px solid #EF4444;
+      border-radius: 4px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+    }
+    .dashboard-alert strong {
+      font-weight: 600;
+      color: var(--text);
     }
 
-    .tg-typing span {
-      width: 6px; height: 6px;
-      background: var(--text-faint);
-      border-radius: 50%;
-      animation: typing-bounce 1.4s infinite;
+    .channel-caption {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 20px auto 0;
+      max-width: 600px;
     }
 
-    .tg-typing span:nth-child(2) { animation-delay: 0.2s; }
-    .tg-typing span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes typing-bounce {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
-      30%            { transform: translateY(-5px); opacity: 1; }
+    @media (max-width: 900px) {
+      .channel-showcase {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 380px;
+      }
+      .channel-card {
+        font-size: 12px;
+      }
     }
 
     /* ── DIFF section ─────────────────────────────────────────────── */
@@ -1895,42 +1920,64 @@
         </div>
       </div>
 
-      <!-- Telegram mockup -->
-      <div class="tg-wrapper fade-up">
-        <div class="tg-window">
-          <div class="tg-header">
-            <div class="tg-avatar">⚡</div>
-            <div>
-              <div class="tg-bot-name">Sentinel Invest</div>
-              <div class="tg-bot-status" data-i18n="tg.status"></div>
+      <!-- Multi-channel mockup (PR-42) — substitui Telegram-only para alinhar com copy multi-canal da Sprint 4 -->
+      <div class="channel-showcase fade-up">
+        <!-- Card Telegram -->
+        <div class="channel-card channel-telegram">
+          <div class="channel-header">
+            <span class="channel-icon">✈</span>
+            <span class="channel-name">Telegram · @ailo_bot</span>
+          </div>
+          <div class="channel-body">
+            <div class="telegram-bubble">
+              <strong data-i18n="hero.briefing.title"></strong>
+              <p data-i18n="hero.briefing.line1"></p>
+              <p data-i18n="hero.briefing.line2"></p>
+              <p data-i18n="hero.briefing.line3"></p>
             </div>
           </div>
-          <div class="tg-body">
-            <!-- Bot message 1 -->
-            <div class="tg-msg bot">
-              <div class="tg-bubble bot">
-                <div class="tg-label" data-i18n="tg.label"></div>
-                <span data-i18n="tg.msg1"></span>
-              </div>
-              <div class="tg-time">14:32</div>
+        </div>
+
+        <!-- Card E-mail -->
+        <div class="channel-card channel-email">
+          <div class="channel-header">
+            <span class="channel-icon">✉</span>
+            <span class="channel-name">E-mail · AILo Briefing</span>
+          </div>
+          <div class="channel-body">
+            <div class="email-subject" data-i18n="hero.briefing.email_subject"></div>
+            <div class="email-body">
+              <p data-i18n="hero.briefing.line1"></p>
+              <p data-i18n="hero.briefing.line2"></p>
+              <p data-i18n="hero.briefing.line3"></p>
             </div>
-            <!-- User reply -->
-            <div class="tg-msg user">
-              <div class="tg-bubble user" data-i18n="tg.reply"></div>
-              <div class="tg-time">14:33</div>
+          </div>
+        </div>
+
+        <!-- Card Dashboard -->
+        <div class="channel-card channel-dashboard">
+          <div class="channel-header">
+            <span class="channel-icon">▣</span>
+            <span class="channel-name" data-i18n="hero.briefing.dashboard_label"></span>
+          </div>
+          <div class="channel-body">
+            <div class="dashboard-kpi">
+              <span data-i18n="hero.briefing.dashboard_today"></span>
+              <strong class="negative">-0.8%</strong>
             </div>
-            <!-- Bot typing indicator -->
-            <div class="tg-msg bot">
-              <div class="tg-bubble bot">
-                <span data-i18n="tg.msg2"></span>
-                <div class="tg-typing">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
+            <div class="dashboard-kpi">
+              <span data-i18n="hero.briefing.dashboard_ytd"></span>
+              <strong class="positive">+14.3%</strong>
+            </div>
+            <div class="dashboard-alert">
+              <strong>⚠ SMH 32%</strong>
+              <span data-i18n="hero.briefing.dashboard_limit"></span>
             </div>
           </div>
         </div>
       </div>
+
+      <p class="channel-caption" data-i18n="hero.channel_caption"></p>
     </div>
   </section>
 
@@ -2732,12 +2779,17 @@
         'hero.trust1':       '14 dias grátis',
         'hero.trust2':       'Cancele a qualquer momento',
         'hero.trust3':       'Sem contrato de longo prazo',
-        /* telegram mockup */
-        'tg.status': '● online',
-        'tg.label':  '📊 Atualização da sua carteira',
-        'tg.msg1':   'Sua posição em IVVB11 subiu 3,8% esta semana. Representa 22% da sua carteira — acima da banda de 20% que você definiu. Quer que eu analise as opções de rebalanceamento?',
-        'tg.reply':  'Sim, por favor!',
-        'tg.msg2':   'Analisando sua posição em IVVB11 com base nos aportes registados e nas suas bandas alvo...',
+        /* multi-channel mockup (PR-42) */
+        'hero.briefing.title':            '📊 Briefing diário — terça',
+        'hero.briefing.email_subject':    'Briefing AILo · terça, 15/abr',
+        'hero.briefing.line1':            'Mercado abriu em queda (-1.2%).',
+        'hero.briefing.line2':            'Sua carteira: -0.8% hoje · +14.3% no ano.',
+        'hero.briefing.line3':            '🔴 SMH 32% (limite 25%).',
+        'hero.briefing.dashboard_label':  'Dashboard web',
+        'hero.briefing.dashboard_today':  'Hoje',
+        'hero.briefing.dashboard_ytd':    'No ano',
+        'hero.briefing.dashboard_limit':  'limite 25%',
+        'hero.channel_caption':           'O mesmo conteúdo, no canal que você preferir.',
         /* diff */
         'diff.badge': 'O que é diferente',
         'diff.title': 'Não é app de analytics.<br/>É <span class="highlight">análise da sua carteira.</span>',
@@ -3014,11 +3066,17 @@
         'hero.trust1':       '14 días gratis',
         'hero.trust2':       'Cancela cuando quieras',
         'hero.trust3':       'Sin contrato a largo plazo',
-        'tg.status': '● en línea',
-        'tg.label':  '📊 Actualización de tu cartera',
-        'tg.msg1':   'Tu posición en QQQ subió 3,8% esta semana. Representa el 22% de tu cartera — arriba de la banda del 20% que definiste. ¿Analizo opciones de rebalanceo?',
-        'tg.reply':  '¡Sí, por favor!',
-        'tg.msg2':   'Analizando tu posición en QQQ con base en los aportes registrados y tus bandas objetivo...',
+        /* multi-channel mockup (PR-42) */
+        'hero.briefing.title':            '📊 Briefing diario — martes',
+        'hero.briefing.email_subject':    'Briefing AILo · martes, 15/abr',
+        'hero.briefing.line1':            'El mercado abrió en caída (-1.2%).',
+        'hero.briefing.line2':            'Tu cartera: -0.8% hoy · +14.3% en el año.',
+        'hero.briefing.line3':            '🔴 SMH 32% (límite 25%).',
+        'hero.briefing.dashboard_label':  'Dashboard web',
+        'hero.briefing.dashboard_today':  'Hoy',
+        'hero.briefing.dashboard_ytd':    'En el año',
+        'hero.briefing.dashboard_limit':  'límite 25%',
+        'hero.channel_caption':           'El mismo contenido, en el canal que prefieras.',
         'diff.badge': '¿Qué es diferente?',
         'diff.title': 'No es app de analytics.<br/>Es <span class="highlight">análisis de tu cartera.</span>',
         'diff.sub':   'Las plataformas te muestran números. AILo lee los números de tu cartera real y te explica qué importa — en español, en el canal que elijas (Telegram o e-mail), cuando importa.',
@@ -3286,11 +3344,17 @@
         'hero.trust1':       '14 days free',
         'hero.trust2':       'Cancel anytime',
         'hero.trust3':       'No long-term contract',
-        'tg.status': '● online',
-        'tg.label':  '📊 Your portfolio update',
-        'tg.msg1':   'Your QQQ position is up 3.8% this week. It\'s now 22% of your portfolio — above your 20% target band. Want me to analyze rebalancing options?',
-        'tg.reply':  'Yes, please!',
-        'tg.msg2':   'Analyzing your QQQ position based on logged contributions and your target bands...',
+        /* multi-channel mockup (PR-42) */
+        'hero.briefing.title':            '📊 Daily briefing — Tuesday',
+        'hero.briefing.email_subject':    'AILo Briefing · Tuesday, Apr 15',
+        'hero.briefing.line1':            'Market opened down (-1.2%).',
+        'hero.briefing.line2':            'Your portfolio: -0.8% today · +14.3% YTD.',
+        'hero.briefing.line3':            '🔴 SMH 32% (limit 25%).',
+        'hero.briefing.dashboard_label':  'Web dashboard',
+        'hero.briefing.dashboard_today':  'Today',
+        'hero.briefing.dashboard_ytd':    'YTD',
+        'hero.briefing.dashboard_limit':  'limit 25%',
+        'hero.channel_caption':           'Same content, in the channel you prefer.',
         'diff.badge': 'What\'s different',
         'diff.title': 'Not an analytics app.<br/>It\'s <span class="highlight">your portfolio\'s analysis.</span>',
         'diff.sub':   'Investment platforms show you numbers. AILo reads the numbers of your real portfolio and explains what matters — in plain language, on the channel you choose (Telegram or email), when it matters.',
