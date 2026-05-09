@@ -9,6 +9,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script>
+    /* Invite gate — corre antes do <body> para evitar flash do conteúdo. */
+    (function () {
+      try {
+        if (localStorage.getItem('sentinel-invite-validated') !== '1') {
+          document.documentElement.classList.add('gate-active');
+        }
+      } catch (e) {
+        document.documentElement.classList.add('gate-active');
+      }
+    })();
+  </script>
   <style>
     /* ── Reset & Base ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1846,9 +1858,166 @@
       font-style: italic;
       color: var(--gold3);
     }
+
+    /* ── Invite gate ──────────────────────────────────────────────────
+       Gate público: pede código de convite (referral_code de cliente
+       activo, ou ROGO-SKIP master). Validação contra
+       https://app.sentinelinvest.co/validate-invite-code. Após sucesso,
+       grava flag em localStorage e remove o overlay. */
+    html.gate-active, html.gate-active body { overflow: hidden; }
+    .invite-gate { display: none; }
+    html.gate-active .invite-gate {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    html.gate-active .invite-gate::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at top, rgba(249, 115, 22, 0.10), transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(126, 184, 212, 0.06), transparent 60%);
+      pointer-events: none;
+    }
+    .invite-gate-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px 32px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    .invite-gate-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .invite-gate-logo strong { font-weight: 700; color: var(--gold2); }
+    .invite-gate-logo em { font-weight: 300; font-style: italic; color: var(--gold3); }
+    .invite-gate-brand {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .invite-gate-brand .highlight { color: var(--orange-light); }
+    .invite-gate-title {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .invite-gate-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .invite-gate-form { display: flex; flex-direction: column; gap: 12px; }
+    .invite-gate-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Courier Prime', monospace;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      text-align: center;
+      text-transform: uppercase;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .invite-gate-input:focus {
+      outline: none;
+      border-color: var(--border-orange);
+      box-shadow: 0 0 0 3px var(--orange-subtle);
+    }
+    .invite-gate-input::placeholder {
+      color: var(--text-faint);
+      text-transform: none;
+      letter-spacing: 0.02em;
+    }
+    .invite-gate-btn {
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--orange);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .invite-gate-btn:hover { background: var(--orange-dark); }
+    .invite-gate-btn:active { transform: scale(0.98); }
+    .invite-gate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .invite-gate-msg {
+      min-height: 20px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+    .invite-gate-msg.error { color: #f87171; }
+    .invite-gate-help {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
+    .invite-gate-help a { color: var(--orange-light); border-bottom: 1px dotted var(--orange-subtle); }
   </style>
 </head>
 <body class="educational-mode">
+
+  <!-- ── INVITE GATE ─────────────────────────────────────────────────
+       Overlay full-screen com modal de código de convite. Activo via
+       <html class="gate-active"> (script no <head>). Validação contra
+       /validate-invite-code. Após sucesso, JS remove a classe e grava
+       'sentinel-invite-validated' em localStorage. -->
+  <div class="invite-gate" id="inviteGate" role="dialog" aria-modal="true" aria-labelledby="inviteGateTitle">
+    <div class="invite-gate-card">
+      <div class="invite-gate-logo"><strong>AI</strong><em>Lo</em></div>
+      <div class="invite-gate-brand">Sentinel<span class="highlight"> Invest</span></div>
+      <h2 class="invite-gate-title" id="inviteGateTitle" data-i18n="gate.title"></h2>
+      <p class="invite-gate-sub" data-i18n="gate.subtitle"></p>
+      <form class="invite-gate-form" id="inviteGateForm" novalidate>
+        <input
+          type="text"
+          class="invite-gate-input"
+          id="inviteGateInput"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          required
+          data-i18n-placeholder="gate.placeholder"
+        />
+        <button type="submit" class="invite-gate-btn" id="inviteGateBtn" data-i18n="gate.cta"></button>
+        <div class="invite-gate-msg" id="inviteGateMsg"></div>
+      </form>
+      <div class="invite-gate-help" data-i18n-html="gate.help"></div>
+    </div>
+  </div>
 
   <!-- ── NAV ─────────────────────────────────────────────────────── -->
   <nav class="nav">
@@ -3045,6 +3214,15 @@
         'track_record.meta':       'Atualizado em {date} · {days} dias desde o início',
         'track_record.disclaimer': 'Resultados passados não garantem resultados futuros. O Model Portfolio é uma carteira-modelo de US$ 1.000 fixos para fins educacionais — não é recomendação de investimento.',
         /* lang */
+        /* invite gate */
+        'gate.title':       'Acesso por convite',
+        'gate.subtitle':    'A AILo está em fase fechada. Para ver esta página, informe o código de convite que recebeu de algum cliente.',
+        'gate.placeholder': 'AILO-XXXX-XXXXXX',
+        'gate.cta':         'Entrar',
+        'gate.error_invalid':'Código não reconhecido. Verifique se foi digitado correctamente.',
+        'gate.error_network':'Não conseguimos validar agora. Tente novamente em alguns segundos.',
+        'gate.checking':    'A validar…',
+        'gate.help':        'Não tem código? Peça a quem já é cliente um código de indicação.',
         'lang.flag': '🇧🇷',
         'lang.code': 'PT',
       },
@@ -3324,6 +3502,15 @@
         'track_record.loading':    'Cargando datos…',
         'track_record.meta':       'Actualizado el {date} · {days} días desde el inicio',
         'track_record.disclaimer': 'Los resultados pasados no garantizan resultados futuros. El Model Portfolio es una cartera modelo de US$ 1.000 fijos con fines educativos — no es recomendación de inversión.',
+        /* invite gate */
+        'gate.title':       'Acceso por invitación',
+        'gate.subtitle':    'AILo está en fase cerrada. Para ver esta página, ingresa el código de invitación que recibiste de algún cliente.',
+        'gate.placeholder': 'AILO-XXXX-XXXXXX',
+        'gate.cta':         'Entrar',
+        'gate.error_invalid':'Código no reconocido. Verifica que esté escrito correctamente.',
+        'gate.error_network':'No pudimos validar ahora. Inténtalo de nuevo en unos segundos.',
+        'gate.checking':    'Validando…',
+        'gate.help':        '¿No tienes código? Pídele a alguien que ya sea cliente un código de referido.',
         'lang.flag': '🇪🇸',
         'lang.code': 'ES',
       },
@@ -3603,6 +3790,15 @@
         'track_record.loading':    'Loading data…',
         'track_record.meta':       'Updated {date} · {days} days since inception',
         'track_record.disclaimer': 'Past performance does not guarantee future results. The Model Portfolio is a $1,000 flat reference portfolio for educational purposes — not investment advice.',
+        /* invite gate */
+        'gate.title':       'Invitation only',
+        'gate.subtitle':    'AILo is in a closed phase. To view this page, enter the invitation code you received from an existing client.',
+        'gate.placeholder': 'AILO-XXXX-XXXXXX',
+        'gate.cta':         'Enter',
+        'gate.error_invalid':'Code not recognised. Check that you typed it correctly.',
+        'gate.error_network':'We couldn’t validate right now. Please try again in a few seconds.',
+        'gate.checking':    'Checking…',
+        'gate.help':        'No code? Ask an existing client for their referral code.',
         'lang.flag': '🇺🇸',
         'lang.code': 'EN',
       }
@@ -4135,8 +4331,68 @@
         });
     }
 
+    /* ── Invite gate ──────────────────────────────────────────────── */
+    const GATE_API = 'https://app.sentinelinvest.co/api/validate-invite-code';
+
+    function _gateMsg(text, isError) {
+      const el = document.getElementById('inviteGateMsg');
+      if (!el) return;
+      el.textContent = text || '';
+      el.classList.toggle('error', !!isError);
+    }
+
+    function _gateUnlock() {
+      try { localStorage.setItem('sentinel-invite-validated', '1'); } catch (e) {}
+      document.documentElement.classList.remove('gate-active');
+    }
+
+    function setupInviteGate() {
+      const form  = document.getElementById('inviteGateForm');
+      const input = document.getElementById('inviteGateInput');
+      const btn   = document.getElementById('inviteGateBtn');
+      if (!form || !input || !btn) return;
+
+      // Já validado anteriormente — gate fica oculto, nada a fazer.
+      if (!document.documentElement.classList.contains('gate-active')) return;
+
+      // Foco no input quando o gate está activo.
+      setTimeout(() => { try { input.focus(); } catch (e) {} }, 50);
+
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const lang = localStorage.getItem('sentinel-lang') || 'pt';
+        const dict = T[lang] || T.pt;
+        const code = (input.value || '').trim().toUpperCase();
+        if (!code) { _gateMsg(dict['gate.error_invalid'], true); return; }
+
+        btn.disabled = true;
+        _gateMsg(dict['gate.checking'], false);
+
+        try {
+          const res = await fetch(`${GATE_API}?code=${encodeURIComponent(code)}`, {
+            method: 'GET',
+            cache: 'no-store',
+          });
+          if (!res.ok) throw new Error('http_' + res.status);
+          const data = await res.json();
+          if (data && data.valid === true) {
+            _gateMsg('', false);
+            _gateUnlock();
+          } else {
+            _gateMsg(dict['gate.error_invalid'], true);
+            btn.disabled = false;
+            input.select();
+          }
+        } catch (err) {
+          _gateMsg(dict['gate.error_network'], true);
+          btn.disabled = false;
+        }
+      });
+    }
+
     /* ── Init ─────────────────────────────────────────────────────── */
     applyLang(detectLang());
+    setupInviteGate();
     if (document.readyState === 'complete') {
       loadTrackRecord();
     } else {
