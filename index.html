@@ -97,6 +97,23 @@
       border-radius: 999px;
     }
 
+    /* AILo dourado dentro de um badge (evita o text-transform/letter-spacing
+       do .badge quebrar o logotipo) — mesma identidade do topo da página. */
+    .badge .badge-ailo {
+      font-family: 'Cormorant Garamond', serif;
+      text-transform: none;
+      letter-spacing: 0.01em;
+      font-size: 15px;
+      font-weight: 700;
+      font-style: normal;
+      color: var(--gold2);
+    }
+    .badge .badge-ailo em {
+      font-weight: 300;
+      font-style: italic;
+      color: var(--gold3);
+    }
+
     .badge-dot {
       width: 6px; height: 6px;
       background: var(--orange);
@@ -2199,7 +2216,7 @@
   <section id="ailo" style="background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
     <div class="container">
       <div class="section-label">
-        <span class="badge" data-i18n="ailo.badge"></span>
+        <span class="badge" data-i18n-html="ailo.badge"></span>
       </div>
 
       <div class="ailo-name-card fade-up">
@@ -3200,7 +3217,7 @@
         'footer.ailo_disclaimer': 'O AILO é um Artificial Intelligence Language Observer. Não fornece aconselhamento de investimento, não executa operações nem toma decisões em seu nome. Toda a informação é educacional e informativa. As decisões finais de investimento são inteiramente suas.',
         /* ailo */
         'nav.ailo':           '<span class="brand-ai">AI</span><span class="brand-lo">Lo</span>',
-        'ailo.badge':         'Conheça o AILo',
+        'ailo.badge':         'Conheça o <span class="badge-ailo">AI<em>Lo</em></span>',
         'ailo.subtitle':      'Não é chatbot genérico. O AILo é um agente de IA que conhece cada detalhe da sua carteira — e antecipa o que os números dizem antes que vire notícia.',
         'ailo.oracle.title':  'Observer — antecipa o que os dados mostram',
         'ailo.oracle.desc':   'Analisa padrões, correlações e sinais da sua carteira e do mercado. Não adivinha, calcula com base em regras explícitas.',
@@ -3491,7 +3508,7 @@
         'footer.ailo_disclaimer': 'AILO es un Artificial Intelligence Language Observer. No proporciona asesoramiento de inversión, no ejecuta operaciones ni toma decisiones en su nombre. Toda la información es educativa e informativa. Las decisiones finales de inversión son enteramente suyas.',
         /* ailo */
         'nav.ailo':           '<span class="brand-ai">AI</span><span class="brand-lo">Lo</span>',
-        'ailo.badge':         'Conoce al AILo',
+        'ailo.badge':         'Conoce a <span class="badge-ailo">AI<em>Lo</em></span>',
         'ailo.subtitle':      'No es un chatbot genérico. AILo es un agente de IA que conoce cada detalle de tu cartera — y anticipa lo que los números dicen antes de que sea noticia.',
         'ailo.oracle.title':  'Observer — anticipa lo que los datos muestran',
         'ailo.oracle.desc':   'Analiza patrones, correlaciones y señales de tu cartera y del mercado. No adivina, calcula con reglas explícitas.',
@@ -3781,7 +3798,7 @@
         'footer.ailo_disclaimer': 'AILO is an Artificial Intelligence Language Observer. It does not provide investment advice, does not execute trades, and does not make decisions on your behalf. All information is educational and informational. Final investment decisions are entirely yours.',
         /* ailo */
         'nav.ailo':           '<span class="brand-ai">AI</span><span class="brand-lo">Lo</span>',
-        'ailo.badge':         'Meet AILo',
+        'ailo.badge':         'Meet <span class="badge-ailo">AI<em>Lo</em></span>',
         'ailo.subtitle':      'Not a generic chatbot. AILo is an AI agent that knows every detail of your portfolio — and anticipates what the numbers show before it becomes news.',
         'ailo.oracle.title':  'Observer — anticipates what the data shows',
         'ailo.oracle.desc':   'Analyzes patterns, correlations and signals in your portfolio and the market. Doesn\'t guess, calculates with explicit rules.',
