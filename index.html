@@ -406,6 +406,45 @@
 
     .trust-icon { color: var(--orange); font-size: 14px; }
 
+    /* ── Prova social honesta acima da dobra (Passo 2a) ─────────────────── */
+    .hero-proof {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.06);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .hero-proof:hover {
+      border-color: var(--orange);
+      background: rgba(249, 115, 22, 0.1);
+    }
+    .hero-proof-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+      flex-shrink: 0;
+    }
+    .hero-proof-arrow { color: var(--orange); font-size: 14px; }
+    .hero-proof-note {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-inline: auto;
+      opacity: 0.75;
+    }
+
     /* ── Multi-channel showcase (PR-42) — substitui mockup Telegram-only ─── */
     .channel-showcase {
       margin-top: 72px;
@@ -2068,10 +2107,9 @@
         <h1 class="hero-title" data-i18n-html="hero.title"></h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
         <div class="hero-actions">
-          <!-- Stripe integration: substituir href por checkout link da Stripe (Early Adopter).
-               Para já abre a secção de preço onde estão os 3 tiers. -->
-          <a href="#preco" class="btn-primary" style="font-size:16px; padding:16px 32px;" data-stripe-plan="early" data-i18n="hero.cta_primary"></a>
-          <a href="/demo/" class="btn-secondary" data-i18n="hero.cta_secondary"></a>
+          <!-- CTA de convite removido do hero (mantido no header + final da página).
+               Hero leva à demo gratuita — ação de baixa fricção, sem pedir convite. -->
+          <a href="/demo/" class="btn-primary" style="font-size:16px; padding:16px 32px;" data-i18n="hero.cta_secondary"></a>
         </div>
         <div class="hero-trust">
           <div class="trust-item">
@@ -2087,6 +2125,13 @@
             <span data-i18n="hero.trust3"></span>
           </div>
         </div>
+        <!-- Prova social honesta acima da dobra (Passo 2a) — link p/ seção Track Record -->
+        <a class="hero-proof" href="#track-record">
+          <span class="hero-proof-dot"></span>
+          <span data-i18n="hero.proof"></span>
+          <span class="hero-proof-arrow">→</span>
+        </a>
+        <p class="hero-proof-note" data-i18n="hero.proof_note"></p>
       </div>
 
       <!-- Multi-channel mockup (PR-42) — substitui Telegram-only para alinhar com copy multi-canal da Sprint 4 -->
@@ -2942,13 +2987,15 @@
         'nav.client':  'Já sou cliente →',
         /* hero */
         'hero.badge':        'Análise de portfólio · IA + Telegram ou e-mail',
-        'hero.title':        'A segunda opinião que falta na <span class="highlight">sua carteira.</span>',
-        'hero.subtitle':     'Análise rules-based, transparente e multi-corretora. Sem corretagem. Sem produto pra empurrar. Você decide; a AILo te mostra o que ela veria.',
+        'hero.title':        'Uma segunda opinião sobre a sua carteira — <span class="highlight">baseada em regras, não em achismo.</span>',
+        'hero.subtitle':     'Para quem investe em ETFs, ações e cripto via Nomad, Avenue, Fintual ou na sua exchange. A AILo analisa concentração, drift e regime de mercado contra regras transparentes — e te avisa no Telegram ou e-mail.',
         'hero.cta_primary':  'Ver minha carteira na AILo →',
         'hero.cta_secondary':'Análise gratuita de 10 min →',
         'hero.trust1':       '14 dias grátis',
         'hero.trust2':       'Cancele a qualquer momento',
         'hero.trust3':       'Sem contrato de longo prazo',
+        'hero.proof':        'Model Portfolio pública e auditável vs VT desde abr/2026',
+        'hero.proof_note':   'Resultados passados não garantem resultados futuros. Carteira-modelo educacional, não é recomendação.',
         /* multi-channel mockup (PR-42) */
         'hero.briefing.title':            '📊 Briefing diário — terça',
         'hero.briefing.email_subject':    'Briefing AILo · terça, 15/abr',
@@ -3239,13 +3286,15 @@
         'nav.cta':     'Probar 14 días gratis',
         'nav.client':  'Ya soy cliente →',
         'hero.badge':        'Análisis de portafolio · IA + Telegram o e-mail',
-        'hero.title':        'La segunda opinión que le falta a <span class="highlight">tu cartera.</span>',
-        'hero.subtitle':     'Análisis transparente basado en reglas, multi-corredor. Sin corretaje. Sin producto que empujarte. Tú decides; AILo te muestra lo que ella vería.',
+        'hero.title':        'Una segunda opinión sobre tu cartera — <span class="highlight">basada en reglas, no en corazonadas.</span>',
+        'hero.subtitle':     'Para quien invierte en ETFs, acciones y cripto vía Nomad, Avenue, Fintual o tu exchange. AILo analiza concentración, drift y régimen de mercado contra reglas transparentes — y te avisa en Telegram o e-mail.',
         'hero.cta_primary':  'Ver mi cartera en AILo →',
         'hero.cta_secondary':'Análisis gratuito de 10 min →',
         'hero.trust1':       '14 días gratis',
         'hero.trust2':       'Cancela cuando quieras',
         'hero.trust3':       'Sin contrato a largo plazo',
+        'hero.proof':        'Model Portfolio pública y auditable vs VT desde abr/2026',
+        'hero.proof_note':   'Rentabilidades pasadas no garantizan resultados futuros. Cartera-modelo educativa, no es recomendación.',
         /* multi-channel mockup (PR-42) */
         'hero.briefing.title':            '📊 Briefing diario — martes',
         'hero.briefing.email_subject':    'Briefing AILo · martes, 15/abr',
@@ -3527,13 +3576,15 @@
         'nav.cta':     'Try 14 days free',
         'nav.client':  'Already a client →',
         'hero.badge':        'Portfolio analysis · AI + Telegram or email',
-        'hero.title':        'The second opinion your <span class="highlight">portfolio is missing.</span>',
-        'hero.subtitle':     'Rules-based, transparent, multi-broker analysis. No brokerage. No product to push. You decide; AILo shows you what it would see.',
+        'hero.title':        'A second opinion on your portfolio — <span class="highlight">rules-based, not guesswork.</span>',
+        'hero.subtitle':     'For people who invest in ETFs, stocks and crypto across Nomad, Avenue, Fintual or your exchange. AILo analyzes concentration, drift and market regime against transparent rules — and alerts you on Telegram or email.',
         'hero.cta_primary':  'See my portfolio in AILo →',
         'hero.cta_secondary':'Free 10-min analysis →',
         'hero.trust1':       '14 days free',
         'hero.trust2':       'Cancel anytime',
         'hero.trust3':       'No long-term contract',
+        'hero.proof':        'Public Model Portfolio, auditable vs VT since Apr/2026',
+        'hero.proof_note':   'Past results do not guarantee future returns. Educational model portfolio, not a recommendation.',
         /* multi-channel mockup (PR-42) */
         'hero.briefing.title':            '📊 Daily briefing — Tuesday',
         'hero.briefing.email_subject':    'AILo Briefing · Tuesday, Apr 15',
